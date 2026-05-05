@@ -44,7 +44,17 @@ public class AuthFilter implements GlobalFilter, Ordered {
             "/api/invoices",
             "/api/payment-methods",
             "/api/tax-rates",
-            "/api/transactions"
+            "/api/transactions",
+
+            "/api/guides",
+            "/api/languages",
+            "/api/guide-languages",
+            "/api/certifications",
+            "/api/adventures",
+            "/api/reviews",
+            "/api/categories",
+            "/api/gear",
+            "/api/time-slots"
     );
 
     @Override
