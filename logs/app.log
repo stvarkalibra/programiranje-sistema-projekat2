@@ -1,0 +1,436 @@
+2026-05-05 15:17:22 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 24.0.2 with PID 14880 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:17:22 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:17:22 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:17:22 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:17:24 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:17:24 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 70 ms. Found 1 JPA repository interface.
+2026-05-05 15:17:24 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2254 ms
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:17:25 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:17:25 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:17:26 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:17:26 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:17:27 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@154b0748
+2026-05-05 15:17:27 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:17:27 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:17:28 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:17:29 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:17:29 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:17:31 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:17:31 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:17:31 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:17:31 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 14.362 seconds (process running for 15.917)
+2026-05-05 15:17:32 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:17:32 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:17:32 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-05 15:19:33 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:19:33 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:19:33 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:19:33 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:19:33 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:21:12 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 24.0.2 with PID 8888 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:21:12 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:21:12 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:21:12 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 1 JPA repository interface.
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:21:14 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2315 ms
+2026-05-05 15:21:15 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:21:15 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:21:15 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:21:16 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:21:16 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:21:16 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@6d695ec4
+2026-05-05 15:21:16 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:21:16 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:21:18 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:21:18 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:21:18 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:21:19 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:21:19 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:21:19 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:21:19 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 11.54 seconds (process running for 13.094)
+2026-05-05 15:21:20 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:21:20 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:21:20 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-05 15:22:20 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:22:20 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:22:20 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:22:20 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:22:20 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:27:56 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 24.0.2 with PID 12928 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:27:56 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:27:56 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:27:56 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 1 JPA repository interface.
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:27:58 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2102 ms
+2026-05-05 15:27:59 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:27:59 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:27:59 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:27:59 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:27:59 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:28:00 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@14c5283
+2026-05-05 15:28:00 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:28:00 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:28:01 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:28:01 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:28:01 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:28:02 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:28:02 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:28:02 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:28:02 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 9.732 seconds (process running for 11.191)
+2026-05-05 15:28:03 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:28:03 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:28:03 [RMI TCP Connection(4)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 12 ms
+2026-05-05 15:29:34 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:29:34 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:29:34 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:29:34 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:29:34 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:30:09 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 21.0.2 with PID 17224 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:30:09 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:30:09 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:30:09 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:30:12 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:30:12 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 128 ms. Found 1 JPA repository interface.
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:30:13 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3845 ms
+2026-05-05 15:30:14 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:30:14 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:30:14 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:30:14 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:30:14 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:30:15 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@337cb81d
+2026-05-05 15:30:15 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:30:15 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:30:16 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:30:16 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:30:17 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:30:17 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:30:18 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:30:18 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:30:18 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 13.046 seconds (process running for 14.71)
+2026-05-05 15:30:18 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:30:18 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:30:18 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - Starting MaintenanceServiceApplication using Java 21.0.2 with PID 5900 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\maintenance-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=maintenance-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-05 15:30:40 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-05 15:30:42 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:30:42 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 4 JPA repository interfaces.
+2026-05-05 15:30:42 [restartedMain] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=b07550eb-02dc-332a-a181-7cac5d096642
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3885 ms
+2026-05-05 15:30:44 [restartedMain] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:maintenancedb user=SA
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:30:45 [restartedMain] WARN  [traceId=] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-05 15:30:45 [restartedMain] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:30:47 [restartedMain] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:30:47 [restartedMain] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:30:47 [restartedMain] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:30:48 [restartedMain] INFO  [traceId=] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-05 15:30:51 [restartedMain] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:maintenancedb'
+2026-05-05 15:30:51 [restartedMain] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:30:51 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-05 15:30:52 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - Started MaintenanceServiceApplication in 14.517 seconds (process running for 17.421)
+2026-05-05 15:30:52 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:30:52 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:30:52 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-05 15:37:21 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:37:21 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:37:21 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:37:21 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:37:21 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:37:21 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:37:21 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:37:23 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:37:23 [SpringApplicationShutdownHook] WARN  [traceId=] o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2026-05-05 15:37:23 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:37:24 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:38:12 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 21.0.2 with PID 2184 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:38:12 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:38:12 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:38:12 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:38:13 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:38:13 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 69 ms. Found 1 JPA repository interface.
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:38:14 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2457 ms
+2026-05-05 15:38:15 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:38:15 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:38:15 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:38:15 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:38:15 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:38:17 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@665b441e
+2026-05-05 15:38:17 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:38:17 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:38:18 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:38:19 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:38:19 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:38:20 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:38:20 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:38:20 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:38:20 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 12.888 seconds (process running for 14.334)
+2026-05-05 15:38:21 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:38:21 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:38:21 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - Starting AccommodationServiceApplication using Java 21.0.2 with PID 9604 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\accommodation-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=accommodation-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-05 15:38:39 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-05 15:38:43 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:38:43 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 191 ms. Found 4 JPA repository interfaces.
+2026-05-05 15:38:44 [restartedMain] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=bbdf610e-858b-30c8-8678-1db2af6fcf5e
+2026-05-05 15:38:45 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-05 15:38:45 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:38:45 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-05-05 15:38:45 [restartedMain] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:38:45 [restartedMain] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 6345 ms
+2026-05-05 15:38:47 [restartedMain] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:38:47 [restartedMain] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-05-05 15:38:47 [restartedMain] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:38:48 [restartedMain] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:38:48 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:38:48 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:accommodationdb user=SA
+2026-05-05 15:38:48 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:38:48 [restartedMain] WARN  [traceId=] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-05 15:38:48 [restartedMain] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:38:50 [restartedMain] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:38:50 [restartedMain] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:38:50 [restartedMain] INFO  [traceId=] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-05 15:38:52 [restartedMain] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:38:55 [restartedMain] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:accommodationdb'
+2026-05-05 15:38:55 [restartedMain] INFO  [traceId=] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-05 15:38:55 [restartedMain] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:38:55 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-05 15:38:55 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - Started AccommodationServiceApplication in 19.002 seconds (process running for 22.482)
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:39:43 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] WARN  [traceId=] o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:39:43 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:39:43 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - Starting AccommodationServiceApplication using Java 21.0.2 with PID 10148 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\accommodation-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=accommodation-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-05 15:40:43 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-05 15:40:45 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:40:45 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 151 ms. Found 4 JPA repository interfaces.
+2026-05-05 15:40:46 [restartedMain] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=bbdf610e-858b-30c8-8678-1db2af6fcf5e
+2026-05-05 15:40:48 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-05-05 15:40:48 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:40:48 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-05-05 15:40:48 [restartedMain] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:40:48 [restartedMain] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4818 ms
+2026-05-05 15:40:49 [restartedMain] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:40:49 [restartedMain] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-05-05 15:40:49 [restartedMain] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:40:50 [restartedMain] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:40:50 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:40:50 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:accommodationdb user=SA
+2026-05-05 15:40:50 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:40:50 [restartedMain] WARN  [traceId=] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-05 15:40:50 [restartedMain] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:40:52 [restartedMain] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:40:52 [restartedMain] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:40:52 [restartedMain] INFO  [traceId=] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-05 15:40:55 [restartedMain] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:40:59 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Starting AuthServiceApplication using Java 21.0.2 with PID 12620 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\auth-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:40:59 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:40:59 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:40:59 [main] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=auth-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:41:00 [restartedMain] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:accommodationdb'
+2026-05-05 15:41:00 [restartedMain] INFO  [traceId=] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-05 15:41:01 [restartedMain] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:41:01 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:41:01 [main] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 102 ms. Found 1 JPA repository interface.
+2026-05-05 15:41:01 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-05-05 15:41:01 [restartedMain] INFO  [traceId=] c.e.a.AccommodationServiceApplication - Started AccommodationServiceApplication in 22.29 seconds (process running for 24.002)
+2026-05-05 15:41:01 [main] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=81855221-77e9-328f-9cc8-7d30453bd867
+2026-05-05 15:41:01 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:41:01 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:41:01 [RMI TCP Connection(2)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-05-05 15:41:02 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8085 (http)
+2026-05-05 15:41:02 [main] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:41:02 [main] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-05 15:41:02 [main] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:41:02 [main] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3386 ms
+2026-05-05 15:41:03 [main] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:41:03 [main] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-05-05 15:41:03 [main] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:41:03 [main] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:41:03 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:41:04 [main] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@52bb3dcd
+2026-05-05 15:41:04 [main] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:41:04 [main] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 3.45.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:41:05 [main] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:41:05 [main] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:41:06 [main] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:41:06 [main] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:sqlite:auth_database.db'
+2026-05-05 15:41:07 [main] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:41:07 [main] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8085 (http) with context path '/'
+2026-05-05 15:41:07 [main] INFO  [traceId=] c.e.a.AuthServiceApplication - Started AuthServiceApplication in 11.084 seconds (process running for 12.654)
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - Starting MaintenanceServiceApplication using Java 21.0.2 with PID 8364 (C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4\maintenance-service\target\classes started by Korisnik in C:\Users\Korisnik\Documents\GitHub\ps-project2-2025-26-tim_4)
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:8888
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] o.s.c.c.c.ConfigServerConfigDataLoader - Located environment: name=maintenance-service, profiles=[default], label=null, version=d19360d259d269ae956ad6006502deacfeb5697f, state=
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-05 15:41:27 [restartedMain] INFO  [traceId=] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-05 15:41:30 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-05 15:41:31 [restartedMain] INFO  [traceId=] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 88 ms. Found 4 JPA repository interfaces.
+2026-05-05 15:41:31 [restartedMain] INFO  [traceId=] o.s.cloud.context.scope.GenericScope - BeanFactory id=b07550eb-02dc-332a-a181-7cac5d096642
+2026-05-05 15:41:33 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-05 15:41:33 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-05 15:41:33 [restartedMain] INFO  [traceId=] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-05-05 15:41:33 [restartedMain] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-05 15:41:33 [restartedMain] INFO  [traceId=] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 6191 ms
+2026-05-05 15:41:34 [restartedMain] INFO  [traceId=] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-05 15:41:34 [restartedMain] INFO  [traceId=] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.42.Final
+2026-05-05 15:41:34 [restartedMain] INFO  [traceId=] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-05 15:41:35 [restartedMain] INFO  [traceId=] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-05 15:41:35 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-05 15:41:35 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:maintenancedb user=SA
+2026-05-05 15:41:35 [restartedMain] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-05 15:41:35 [restartedMain] WARN  [traceId=] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-05 15:41:35 [restartedMain] INFO  [traceId=] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-05 15:41:37 [restartedMain] INFO  [traceId=] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-05 15:41:37 [restartedMain] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:41:37 [restartedMain] WARN  [traceId=] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05 15:41:37 [restartedMain] WARN  [traceId=] o.s.b.d.a.OptionalLiveReloadServer - Unable to start LiveReload server
+2026-05-05 15:41:41 [restartedMain] INFO  [traceId=] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:maintenancedb'
+2026-05-05 15:41:41 [restartedMain] INFO  [traceId=] o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2026-05-05 15:41:41 [restartedMain] INFO  [traceId=] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-05 15:41:41 [restartedMain] INFO  [traceId=] c.e.m.MaintenanceServiceApplication - Started MaintenanceServiceApplication in 17.603 seconds (process running for 19.753)
+2026-05-05 15:41:42 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-05 15:41:42 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-05 15:41:42 [RMI TCP Connection(3)-192.168.56.1] INFO  [traceId=] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:44:06 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] WARN  [traceId=] o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:44:06 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-05 15:44:06 [tomcat-shutdown] INFO  [traceId=] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-05 15:44:06 [SpringApplicationShutdownHook] INFO  [traceId=] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-05 15:44:07 [SpringApplicationShutdownHook] WARN  [traceId=] o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2026-05-05 15:44:07 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-05 15:44:07 [SpringApplicationShutdownHook] INFO  [traceId=] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
