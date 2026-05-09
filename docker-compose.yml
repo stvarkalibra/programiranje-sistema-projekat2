@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # 1. CONFIG SERVIS - Centralna konfiguracija
+  config-service:
+    build: ./config-service
+    container_name: config-cont
+    ports:
+      - "8888:8888"
+    healthcheck:
+      # Da li je config server podignut (odgovara na /health ili samo port)
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - micro-network
+
+  # 2. BAZA PODATAKA: MySQL
+  db-mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: eco_tourism_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - micro-network
+
+  # 3. GATEWAY SERVIS
+#  gateway-service:
+#    build: ./gateway-service
+#    container_name: gateway-cont
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - CONFIG_SERVER_URL=http://config-service:8888
+#      - BOOKING_SERVICE_URL=http://booking-service:8083
+#      - FINANCES_SERVICE_URL=http://finances-service:8084
+#    depends_on:
+#      config-service:
+#        condition: service_healthy
+#    networks:
+#      - micro-network
+
+  # 4. BOOKING SERVIS
+  booking-service:
+    build: ./booking-service
+    container_name: booking-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_healthy
+    networks:
+      - micro-network
+
+  # 5. FINANCES SERVIS
+  finances-service:
+    build: ./finances-service
+    container_name: finances-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_healthy
+    networks:
+      - micro-network
+
+  # 6. ADMINER
+  adminer:
+    image: adminer
+    container_name: adminer-cont
+    ports:
+      - "8085:8080"
+    networks:
+      - micro-network
+
+  #7. RabbitMQ
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    container_name: rabbitmq
+#    ports:
+#      - "5672:5672"   # Port za komunikaciju (AMQP)
+#      - "15672:15672" # Port za Management Web Konzolu
+#    networks:
+#      - micro-network
+
+networks:
+  micro-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

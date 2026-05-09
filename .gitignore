@@ -7,3 +7,6 @@
 
 # Database files
 *.db
+
+# Logs
+*.log
