@@ -26,7 +26,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
-    private final WebClient webClient = WebClient.create("http://localhost:8085");
+    private final WebClient webClient = WebClient.create("http://auth-service:8085");
 
     private static final List<String> EXCLUDED_PATHS = List.of(
             "v3/api-docs",
