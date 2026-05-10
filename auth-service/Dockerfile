@@ -1,16 +1,22 @@
-# Build faza
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
+
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+
+RUN mvn dependency:go-offline -B && \
+    mvn dependency:resolve-plugins -B || true
+
 COPY src ./src
+
 RUN mvn clean package -DskipTests
 
-# Runtime faza
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre
 WORKDIR /app
+
 COPY --from=build /app/target/*.jar app.jar
-# postojeca baza ako postoji
-COPY auth_database.db auth_database.db
+
+ENV SERVER_PORT=8085
+
 EXPOSE 8085
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
