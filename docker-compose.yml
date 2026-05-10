@@ -87,6 +87,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -105,6 +106,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -126,6 +128,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -147,6 +150,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -166,6 +170,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -185,6 +190,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
       - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
