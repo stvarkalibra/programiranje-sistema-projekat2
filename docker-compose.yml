@@ -29,13 +29,19 @@ services:
   auth-service:
     build: ./auth-service
     container_name: auth-cont
+    ports:
+      - "8086:8085"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8085
-      - SPRING_DATASOURCE_URL=jdbc:sqlite:/data/auth_database.db
-    volumes:
-      - auth_sqlite_data:/data
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
+      db-mysql:
+        condition: service_healthy
       config-service:
         condition: service_started
     networks:
@@ -85,8 +91,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -104,8 +110,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -117,6 +123,8 @@ services:
   guide-service:
     build: ./guide-service
     container_name: guide-cont
+    ports:
+      - "8087:8087"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
@@ -124,9 +132,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
-      - SPRING_SQL_INIT_DATA_LOCATIONS=classpath:import.sql
-      - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -138,6 +144,8 @@ services:
   avantura-service:
     build: ./avantura-service
     container_name: avantura-cont
+    ports:
+      - "8088:8088"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -145,9 +153,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
-      - SPRING_SQL_INIT_DATA_LOCATIONS=classpath:import.sql
-      - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -166,8 +172,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
       - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -186,9 +192,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_SQL_INIT_MODE=always
       - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
       - SPRINGDOC_SERVER_URL=http://localhost:8080
+      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -213,4 +219,3 @@ networks:
 
 volumes:
   mysql_data:
-  auth_sqlite_data:
