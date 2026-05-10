@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   # 1. CONFIG SERVIS - Centralna konfiguracija
   config-service:
     build: ./config-service
@@ -98,6 +99,49 @@ services:
     networks:
       - micro-network
 
+  # ACCOMMODATION SERVIS
+  accommodation-service:
+    build: ./accommodation-service
+    container_name: accommodation-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_healthy
+    networks:
+      - micro-network
+
+  # MAINTENANCE SERVIS
+  maintenance-service:
+    build: ./maintenance-service
+    container_name: maintenance-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_healthy
+      accommodation-service:
+        condition: service_started
+    networks:
+      - micro-network
+
   #7. RabbitMQ
 #  rabbitmq:
 #    image: rabbitmq:3-management
@@ -108,9 +152,27 @@ services:
 #    networks:
 #      - micro-network
 
+  # AUTH SERVIS
+  auth-service:
+    build: ./auth-service
+    container_name: auth-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/auth_database.db
+    volumes:
+      - auth_sqlite_data:/app
+    ports:
+      - "8085:8085"
+    depends_on:
+      config-service:
+        condition: service_healthy
+    networks:
+      - micro-network
+
 networks:
   micro-network:
     driver: bridge
 
 volumes:
   mysql_data:
+  auth_sqlite_data:
