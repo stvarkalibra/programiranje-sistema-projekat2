@@ -29,8 +29,6 @@ services:
   auth-service:
     build: ./auth-service
     container_name: auth-cont
-    ports:
-      - "8086:8085"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8085
@@ -119,8 +117,6 @@ services:
   guide-service:
     build: ./guide-service
     container_name: guide-cont
-    ports:
-      - "8087:8087"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
@@ -129,6 +125,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_SQL_INIT_MODE=always
+      - SPRING_SQL_INIT_DATA_LOCATIONS=classpath:import.sql
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
@@ -141,8 +138,6 @@ services:
   avantura-service:
     build: ./avantura-service
     container_name: avantura-cont
-    ports:
-      - "8088:8088"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -151,6 +146,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_SQL_INIT_MODE=always
+      - SPRING_SQL_INIT_DATA_LOCATIONS=classpath:import.sql
       - SPRINGDOC_SERVER_URL=http://localhost:8080
     depends_on:
       db-mysql:
