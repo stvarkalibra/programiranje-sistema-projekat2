@@ -106,6 +106,8 @@ services:
   guide-service:
     build: ./guide-service
     container_name: guide-cont
+    ports:
+      - "8087:8087"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
@@ -114,12 +116,11 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRINGDOC_SERVER_URL=http://localhost:8080
-      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
@@ -127,6 +128,8 @@ services:
   avantura-service:
     build: ./avantura-service
     container_name: avantura-cont
+    ports:
+      - "8088:8088"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -135,12 +138,11 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRINGDOC_SERVER_URL=http://localhost:8080
-      - GATEWAY_URL=http://localhost:8080
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
