@@ -2,19 +2,18 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Kopiramo pom.xml i source kod
+# Kopiramo samo pom.xml da bi Docker keširao skidanje dependency-ja
 COPY pom.xml .
 
-# Docker će ovaj layer skinuti samo ako se pom.xml promeni
+# Skidamo Maven dependency-je i plugin-e
+# Bitno: ova RUN komanda se završava sa "|| true", nema "&& \" posle toga
 RUN mvn dependency:go-offline -B && \
-    mvn dependency:resolve-plugins -B && \
-    mvn io.github.git-commit-id:git-commit-id-maven-plugin:revision -B || true
+    mvn dependency:resolve-plugins -B || true
 
 # Kopiramo source kod
 COPY src ./src
 
-# Pakujemo aplikaciju
-# Sada će Maven koristiti već skinute biblioteke iz prethodnog layera
+# Pakujemo aplikaciju bez testova
 RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime faza (Minimalni JRE)
@@ -24,10 +23,9 @@ WORKDIR /app
 # Kopiramo samo gotov .jar iz prve faze
 COPY --from=build /app/target/*.jar app.jar
 
-# Eksternalizacija porta (Faktor III - Config)
+# Port config-service-a
 ENV SERVER_PORT=8888
 
-# Dokumentujemo port (Swagger će obično biti ovde)
 EXPOSE 8888
 
 # Komanda za pokretanje

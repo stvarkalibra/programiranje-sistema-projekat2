@@ -9,7 +9,6 @@ services:
     ports:
       - "8888:8888"
     healthcheck:
-      # Da li je config server podignut (odgovara na /health ili samo port)
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
       interval: 10s
       timeout: 5s
@@ -25,7 +24,7 @@ services:
       MYSQL_DATABASE: eco_tourism_db
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -37,20 +36,40 @@ services:
       - micro-network
 
   # 3. GATEWAY SERVIS
-#  gateway-service:
-#    build: ./gateway-service
-#    container_name: gateway-cont
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - CONFIG_SERVER_URL=http://config-service:8888
-#      - BOOKING_SERVICE_URL=http://booking-service:8083
-#      - FINANCES_SERVICE_URL=http://finances-service:8084
-#    depends_on:
-#      config-service:
-#        condition: service_healthy
-#    networks:
-#      - micro-network
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-cont
+    ports:
+      - "8080:8080"
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SERVER_PORT=8080
+      - BOOKING_SERVICE_URL=http://booking-service:8083
+      - FINANCES_SERVICE_URL=http://finances-service:8084
+      - GUIDE_SERVICE_URL=http://guide-service:8087
+      - AVANTURA_SERVICE_URL=http://avantura-service:8088
+      - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
+      - MAINTENANCE_SERVICE_URL=http://maintenance-service:8082
+      - AUTH_SERVICE_URL=http://auth-service:8085
+    depends_on:
+      config-service:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      booking-service:
+        condition: service_started
+      finances-service:
+        condition: service_started
+      guide-service:
+        condition: service_started
+      avantura-service:
+        condition: service_started
+      accommodation-service:
+        condition: service_started
+      maintenance-service:
+        condition: service_started
+    networks:
+      - micro-network
 
   # 4. BOOKING SERVIS
   booking-service:
@@ -67,7 +86,7 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
@@ -86,11 +105,55 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
-  # 6. ADMINER
+  # 6. GUIDE SERVIS
+  guide-service:
+    build: ./guide-service
+    container_name: guide-cont
+    ports:
+      - "8087:8087"
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SERVER_PORT=8087
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 7. AVANTURA SERVIS
+  avantura-service:
+    build: ./avantura-service
+    container_name: avantura-cont
+    ports:
+      - "8088:8088"
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SERVER_PORT=8088
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 8. ADMINER
   adminer:
     image: adminer
     container_name: adminer-cont
@@ -99,7 +162,7 @@ services:
     networks:
       - micro-network
 
-  # ACCOMMODATION SERVIS
+  # 9. ACCOMMODATION SERVIS
   accommodation-service:
     build: ./accommodation-service
     container_name: accommodation-cont
@@ -115,11 +178,11 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
-  # MAINTENANCE SERVIS
+  # 10. MAINTENANCE SERVIS
   maintenance-service:
     build: ./maintenance-service
     container_name: maintenance-cont
@@ -136,38 +199,39 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
       accommodation-service:
         condition: service_started
     networks:
       - micro-network
 
-  #7. RabbitMQ
+  # 11. AUTH SERVIS
+  auth-service:
+    build: ./auth-service
+    container_name: auth-cont
+    ports:
+      - "8086:8085"
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SERVER_PORT=8085
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/auth_database.db
+    volumes:
+      - auth_sqlite_data:/app
+    depends_on:
+      config-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 12. RabbitMQ
 #  rabbitmq:
 #    image: rabbitmq:3-management
 #    container_name: rabbitmq
 #    ports:
-#      - "5672:5672"   # Port za komunikaciju (AMQP)
-#      - "15672:15672" # Port za Management Web Konzolu
+#      - "5672:5672"
+#      - "15672:15672"
 #    networks:
 #      - micro-network
-
-  # AUTH SERVIS
-  auth-service:
-    build: ./auth-service
-    container_name: auth-cont
-    environment:
-      - CONFIG_SERVER_URL=http://config-service:8888
-      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/auth_database.db
-    volumes:
-      - auth_sqlite_data:/app
-    ports:
-      - "8085:8085"
-    depends_on:
-      config-service:
-        condition: service_healthy
-    networks:
-      - micro-network
 
 networks:
   micro-network:
