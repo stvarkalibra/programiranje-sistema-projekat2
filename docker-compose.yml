@@ -93,10 +93,13 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
+      - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_started
+      accommodation-service:
         condition: service_started
     networks:
       - micro-network
@@ -112,10 +115,13 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
+      - BOOKING_SERVICE_URL=http://booking-service:8083
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_started
+      booking-service:
         condition: service_started
     networks:
       - micro-network

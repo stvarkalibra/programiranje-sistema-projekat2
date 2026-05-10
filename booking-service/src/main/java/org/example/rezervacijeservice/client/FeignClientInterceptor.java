@@ -21,9 +21,11 @@ public class FeignClientInterceptor implements RequestInterceptor {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
+            String apiKey = request.getHeader("X-API-KEY");
             String user = request.getHeader("X-Authenticated-User");
             String roles = request.getHeader("X-User-Role");
 
+            if (apiKey != null) template.header("X-API-KEY", apiKey);
             if (user != null) template.header("X-Authenticated-User", user);
             if (roles != null) template.header("X-User-Role", roles);
         }
