@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 @OpenAPIDefinition(servers = {
-        @Server(url = "http://localhost:8080/api/booking", description = "Gateway URL")
+        @Server(url = "http://localhost:8080", description = "Gateway URL")
 })
 public class RezervacijeServiceApplication {
 
