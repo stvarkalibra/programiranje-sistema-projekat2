@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   # 1. CONFIG SERVIS - Centralna konfiguracija
   config-service:
     build: ./config-service
@@ -8,7 +9,6 @@ services:
     ports:
       - "8888:8888"
     healthcheck:
-      # Da li je config server podignut
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
       interval: 10s
       timeout: 5s
@@ -28,7 +28,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -44,15 +44,18 @@ services:
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8080
-
-      # Ovo ostavljamo da gateway ili config može da koristi ako ima placeholder-e
       - BOOKING_SERVICE_URL=http://booking-service:8083
       - FINANCES_SERVICE_URL=http://finances-service:8084
       - GUIDE_SERVICE_URL=http://guide-service:8087
       - AVANTURA_SERVICE_URL=http://avantura-service:8088
+      - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
+      - MAINTENANCE_SERVICE_URL=http://maintenance-service:8082
+      - AUTH_SERVICE_URL=http://auth-service:8085
     depends_on:
       config-service:
-        condition: service_healthy
+        condition: service_started
+      auth-service:
+        condition: service_started
       booking-service:
         condition: service_started
       finances-service:
@@ -60,6 +63,10 @@ services:
       guide-service:
         condition: service_started
       avantura-service:
+        condition: service_started
+      accommodation-service:
+        condition: service_started
+      maintenance-service:
         condition: service_started
     networks:
       - micro-network
@@ -79,7 +86,7 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
@@ -98,7 +105,7 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
     networks:
       - micro-network
 
@@ -155,13 +162,74 @@ services:
     networks:
       - micro-network
 
-  # 9. RabbitMQ
+  # 9. ACCOMMODATION SERVIS
+  accommodation-service:
+    build: ./accommodation-service
+    container_name: accommodation-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 10. MAINTENANCE SERVIS
+  maintenance-service:
+    build: ./maintenance-service
+    container_name: maintenance-cont
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
+      - SPRINGDOC_SERVER_URL=http://localhost:8080
+    depends_on:
+      db-mysql:
+        condition: service_healthy
+      config-service:
+        condition: service_started
+      accommodation-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 11. AUTH SERVIS
+  auth-service:
+    build: ./auth-service
+    container_name: auth-cont
+    ports:
+      - "8086:8085"
+    environment:
+      - CONFIG_SERVER_URL=http://config-service:8888
+      - SERVER_PORT=8085
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/auth_database.db
+    volumes:
+      - auth_sqlite_data:/app
+    depends_on:
+      config-service:
+        condition: service_started
+    networks:
+      - micro-network
+
+  # 12. RabbitMQ
 #  rabbitmq:
 #    image: rabbitmq:3-management
 #    container_name: rabbitmq
 #    ports:
-#      - "5672:5672"   # Port za komunikaciju (AMQP)
-#      - "15672:15672" # Port za Management Web Konzolu
+#      - "5672:5672"
+#      - "15672:15672"
 #    networks:
 #      - micro-network
 
@@ -171,3 +239,4 @@ networks:
 
 volumes:
   mysql_data:
+  auth_sqlite_data:
