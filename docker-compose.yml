@@ -136,15 +136,18 @@ services:
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - GATEWAY_URL=http://localhost:8080
+      - AVANTURA_SERVICE_URL=http://avantura-service:8088
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_started
+      avantura-service:
         condition: service_started
     networks:
       - backend-network
