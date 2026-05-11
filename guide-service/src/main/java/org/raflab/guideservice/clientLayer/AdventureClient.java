@@ -1,32 +1,30 @@
 package org.raflab.guideservice.clientLayer;
 
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
 import org.raflab.guideservice.config.FeignRequestInterceptorConfig;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient(
         name = "avantura-service",
-        url = "http://localhost:8088/api/adventures",
+        url = "${AVANTURA_SERVICE_URL:http://localhost:8088}",
         configuration = FeignRequestInterceptorConfig.class
 )
 public interface AdventureClient {
 
-    @GetMapping("/guide/{guideId}/premium")
-    public List<RemoteAdventureDTO> getPremium(
-            @PathVariable Long guideId,
-            @RequestParam Double minPrice);
+    @GetMapping("/api/adventures/guide/{guideId}/premium")
+    List<RemoteAdventureDTO> getPremium(
+            @PathVariable("guideId") Long guideId,
+            @RequestParam("minPrice") Double minPrice
+    );
 
-    @GetMapping("/guide/{guideId}/revenue")
-    public Double getRevenue(@PathVariable Long guideId);
+    @GetMapping("/api/adventures/guide/{guideId}/revenue")
+    Double getRevenue(@PathVariable("guideId") Long guideId);
 
-    @GetMapping("/guide/{guideId}/check-overload")
-    public Boolean checkOverload(@PathVariable Long guideId);
+    @GetMapping("/api/adventures/guide/{guideId}/check-overload")
+    Boolean checkOverload(@PathVariable("guideId") Long guideId);
 
-    @GetMapping("/category/{categoryId}")
-    public List<RemoteAdventureDTO> getByCategory(@PathVariable Long categoryId);
+    @GetMapping("/api/adventures/category/{categoryId}")
+    List<RemoteAdventureDTO> getByCategory(@PathVariable("categoryId") Long categoryId);
 }
