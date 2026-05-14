@@ -1,4 +1,4 @@
-package org.example.finansijeservice;
+package org.example.rezervacijeservice.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -18,7 +18,7 @@ public class OpenApiConfig {
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
-                                        .name("X-API-KEY") // Ime headera koji Gateway traži
+                                        .name("X-API-KEY")
                                         .type(SecurityScheme.Type.APIKEY)
                                         .in(SecurityScheme.In.HEADER)));
     }
