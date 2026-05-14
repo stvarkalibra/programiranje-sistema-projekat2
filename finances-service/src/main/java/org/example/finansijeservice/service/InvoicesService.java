@@ -18,6 +18,7 @@ import org.example.finansijeservice.model.TaxRate;
 import org.example.finansijeservice.repository.InvoicesRepository;
 import org.example.finansijeservice.repository.TaxRatesRepository;
 import org.example.finansijeservice.exception.BadRequestException;
+import org.example.finansijeservice.exception.ConflictException;
 import org.example.finansijeservice.exception.RateLimitException;
 import org.example.finansijeservice.exception.ResourceNotFoundException;
 import org.example.finansijeservice.strategy.TaxCalculationStrategy;
@@ -74,6 +75,16 @@ public class InvoicesService {
     }
 
     public InvoiceResponse fallbackCreateInvoice(InvoiceRequest dto, Throwable t) {
+        if (t instanceof ConflictException) {
+            throw (ConflictException) t;
+        }
+
+        if (t instanceof feign.FeignException.NotFound) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Rezervacija sa ID-jem " + dto.getBookingId() + " nije pronađena."
+            );
+        }
+
         if (t instanceof ResourceNotFoundException) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rezervacija sa ID-jem " + dto.getBookingId() + " nije pronađena."
@@ -83,6 +94,7 @@ public class InvoicesService {
         if (t instanceof ResponseStatusException) {
             throw (ResponseStatusException) t;
         }
+
 
         // Pravi pad sistema (Connection Refused, Timeout, ili je CB već OPEN)
         // Kada stvarno možemo reći da servis nije dostupan
@@ -95,11 +107,7 @@ public class InvoicesService {
     private void validateBooking(BookingDTO booking) {
         List<String> validStatuses = List.of("CONFIRMED", "COMPLETED");
         if (!validStatuses.contains(booking.getStatus())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Nije moguće kreirati račun za rezervaciju sa statusom: " + booking.getStatus() +
-                            ". Rezervacija mora biti u statusu CONFIRMED ili COMPLETED."
-            );
+            throw new ConflictException("Status rezervacije mora biti CONFIRMED ili COMPLETED");
         }
     }
 
@@ -108,10 +116,7 @@ public class InvoicesService {
         boolean hasActive = existing.stream()
                 .anyMatch(i -> !InvoiceStatus.CANCELLED.equals(i.getStatus()));
         if (hasActive) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Aktivna faktura za rezervaciju sa ID-jem " + bookingId + " već postoji."
-            );
+            throw new ConflictException("Racun za ovu rezervaciju je vec izdat");
         }
     }
 

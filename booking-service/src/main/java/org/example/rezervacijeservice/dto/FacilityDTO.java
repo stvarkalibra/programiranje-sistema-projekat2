@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FacilityDTO {
-    @JsonProperty("facility_id")
+    @JsonProperty("id")
     private Long facilityId;
     private String name;
-    @JsonProperty("extra_cost")
     private double extraCost;
 }

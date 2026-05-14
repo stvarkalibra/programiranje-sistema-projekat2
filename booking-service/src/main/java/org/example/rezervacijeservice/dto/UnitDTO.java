@@ -11,11 +11,11 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UnitDTO {
-    @JsonProperty("unit_id")
+    @JsonProperty("id")
     private Long unitId;
     private String name;
-    private String type;
-    @JsonProperty("base_price")
+    private String unitType;
+    @JsonProperty("basePricePerNight")
     private double basePrice;
     private Set<FacilityDTO> facilities = new HashSet<>();
 }

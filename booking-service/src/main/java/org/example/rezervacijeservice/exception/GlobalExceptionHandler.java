@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRateLimitException(RateLimitException ex) {
         ErrorResponse error = new ErrorResponse(LocalDateTime.now(), ex.getStatus().value(), ex.getMessage());
         return new ResponseEntity<>(error, ex.getStatus());
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatus(ResponseStatusException ex) {
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), ex.getStatusCode().value(), ex.getReason());
+        return new ResponseEntity<>(error, ex.getStatusCode());
     }
 
     @ExceptionHandler(BadRequestException.class)
