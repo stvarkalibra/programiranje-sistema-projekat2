@@ -23,4 +23,20 @@ public class RabbitMQConfig {
     public Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
+
+
+    public static final String AVAILABILITY_QUEUE = "availability_queue";
+    public static final String AVAILABILITY_EXCHANGE = "availability_exchange";
+    public static final String AVAILABILITY_ROUTING_KEY = "availability_routing_key";
+
+    @Bean
+    public Queue availabilityQueue() { return new Queue(AVAILABILITY_QUEUE); }
+
+    @Bean
+    public TopicExchange availabilityExchange() { return new TopicExchange(AVAILABILITY_EXCHANGE); }
+
+    @Bean
+    public Binding availabilityBinding() {
+        return BindingBuilder.bind(availabilityQueue()).to(availabilityExchange()).with(AVAILABILITY_ROUTING_KEY);
+    }
 }
