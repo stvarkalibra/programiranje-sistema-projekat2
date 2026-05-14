@@ -18,7 +18,7 @@ public class OpenApiConfig {
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
-                                        .name("X-API-KEY") // Ime headera koji Gateway traži
+                                        .name("X-API-KEY")
                                         .type(SecurityScheme.Type.APIKEY)
                                         .in(SecurityScheme.In.HEADER)));
     }
