@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentCompletedEventDTO {
+    private Long transactionId;
     private Long bookingId;
     private Double amount;
 

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingCancelledEventDTO {
+    private Long bookingId;
     private Long unitId;
     private LocalDate startDate;
     private LocalDate endDate;
