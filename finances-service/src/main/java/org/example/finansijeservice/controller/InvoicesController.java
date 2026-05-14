@@ -3,12 +3,15 @@ package org.example.finansijeservice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.example.finansijeservice.config.RabbitMQConfig;
 import jakarta.validation.Valid;
 import org.example.finansijeservice.dto.BookingDTO;
 import org.example.finansijeservice.dto.InvoiceRequest;
 import org.example.finansijeservice.dto.InvoiceResponse;
 import org.example.finansijeservice.dto.InvoiceUpdateRequest;
 import org.example.finansijeservice.service.InvoicesService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -147,6 +150,16 @@ public class InvoicesController {
             Long id) {
         invoicesService.deleteInvoice(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @GetMapping("/test-rabbit")
+    public String send() {
+        String poruka = "Pozdrav sa RabbitMQ-a!";
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY, poruka);
+        return "Poruka poslata!";
     }
 
 }
