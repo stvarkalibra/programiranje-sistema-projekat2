@@ -91,7 +91,9 @@ services:
       - backend-network
 
   booking-service:
-    build: ./booking-service
+    build:
+      context: .
+      dockerfile: booking-service/Dockerfile
     container_name: booking-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
@@ -107,13 +109,17 @@ services:
         condition: service_healthy
       config-service:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
       accommodation-service:
         condition: service_started
     networks:
       - backend-network
 
   finances-service:
-    build: ./finances-service
+    build:
+      context: .
+      dockerfile: finances-service/Dockerfile
     container_name: finances-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
@@ -128,6 +134,8 @@ services:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
       booking-service:
         condition: service_started
@@ -235,9 +243,14 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     ports:
-      - "5672:5672"   # Port za komunikaciju (AMQP)
-      - "15672:15672" # Port za Management Web Konzolu
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - frontend-network
       - backend-network

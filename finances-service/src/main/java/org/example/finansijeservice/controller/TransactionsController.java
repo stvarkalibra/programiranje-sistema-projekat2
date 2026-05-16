@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.example.finansijeservice.dto.TransactionDTO;
+import org.example.finansijeservice.service.TransactionProducer;
 import org.example.finansijeservice.service.TransactionsService;
+import org.example.sharedmodule.PaymentCompletedEventDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,12 @@ import java.util.List;
 public class TransactionsController {
 
     private final TransactionsService transactionsService;
+    private final TransactionProducer transactionProducer;
 
-    public TransactionsController(TransactionsService transactionsService) {
+
+    public TransactionsController(TransactionsService transactionsService, TransactionProducer transactionProducer) {
         this.transactionsService = transactionsService;
+        this.transactionProducer = transactionProducer;
     }
 
     @GetMapping
@@ -98,5 +103,11 @@ public class TransactionsController {
             Long id) {
         transactionsService.deleteTransaction(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/rabbitMQ/createOrder")
+    public ResponseEntity<TransactionDTO> createOrderV5(@RequestBody TransactionDTO request) {
+        request = transactionProducer.createAndPublish(request);
+        return new ResponseEntity<>(request, HttpStatus.CREATED);
     }
 }
