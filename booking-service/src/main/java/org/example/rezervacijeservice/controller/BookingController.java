@@ -162,4 +162,16 @@ public class BookingController {
             Long id) {
         return ResponseEntity.ok(bookingService.calculateCancellationRefund(id));
     }
+
+    @PutMapping("/rabbitMQ/cancelBooking/{id}")
+    @Operation(summary = "Cancel booking")
+    @ApiResponse(responseCode = "200", description = "Booking updated successfully")
+    @ApiResponse(responseCode = "404", description = "Booking not found")
+    public ResponseEntity<BookingResponse> updateBookingRabbitMQ(
+            @PathVariable
+            @Schema(description = "Booking ID", example = "6")
+            Long id,
+            @RequestBody @Valid UpdateBookingDTO request) {
+        return ResponseEntity.ok(bookingService.updateBooking(id, request));
+    }
 }
