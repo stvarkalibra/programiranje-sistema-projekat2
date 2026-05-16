@@ -63,4 +63,24 @@ public class RabbitMQConfig {
     public Binding availabilityBinding() {
         return BindingBuilder.bind(availabilityQueue()).to(availabilityExchange()).with(AVAILABILITY_ROUTING_KEY);
     }
+
+    public static final String BOOKING_FEEDBACK_QUEUE = "booking_feedback_queue";
+    public static final String BOOKING_FEEDBACK_EXCHANGE = "booking_feedback_exchange";
+    public static final String BOOKING_FEEDBACK_KEY = "booking_feedback_key";
+
+    @Bean
+    public Queue bookingFeedbackQueue() {
+        return new Queue(BOOKING_FEEDBACK_QUEUE);
+    }
+
+    @Bean
+    public TopicExchange bookingFeedbackExchange() {
+        return new TopicExchange(BOOKING_FEEDBACK_EXCHANGE);
+    }
+
+    @Bean
+    public Binding bookingFeedbackBinding(Queue bookingFeedbackQueue, TopicExchange bookingFeedbackExchange) {
+        return BindingBuilder.bind(bookingFeedbackQueue).to(bookingFeedbackExchange).with(BOOKING_FEEDBACK_KEY);
+    }
+
 }
