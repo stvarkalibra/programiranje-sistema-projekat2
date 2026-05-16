@@ -13,6 +13,6 @@ public class BankTransferProcessor implements PaymentProcessor {
 
     @Override
     public String getSupportedMethod() {
-        return "BANK_TRANSFER";
+        return "Bankovna transakcija";
     }
 }

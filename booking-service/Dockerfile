@@ -2,26 +2,27 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Kopiramo samo pom.xml da bi Docker keširao dependency-je
-COPY pom.xml .
+# Instaliramo shared-module u lokalni Maven repo
+COPY shared-module/pom.xml shared-module/pom.xml
+COPY shared-module/src shared-module/src
+RUN mvn -f shared-module/pom.xml install -DskipTests -B
 
-# Skidamo Maven dependency-je i plugin-e
-# Ne pokrećemo git-commit-id plugin jer u Docker buildu nema .git foldera
-RUN mvn dependency:go-offline -B && \
-    mvn dependency:resolve-plugins -B || true
+# Kopiramo samo pom.xml da bi Docker keširao dependency-je
+COPY booking-service/pom.xml booking-service/pom.xml
+RUN mvn -f booking-service/pom.xml dependency:go-offline -B || true
 
 # Kopiramo source kod
-COPY src ./src
+COPY booking-service/src booking-service/src
 
 # Pakujemo aplikaciju bez testova
-RUN mvn clean package -DskipTests
+RUN mvn -f booking-service/pom.xml clean package -DskipTests -B
 
 # Stage 2: Runtime faza (Minimalni JRE)
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Kopiramo samo gotov .jar iz prve faze
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/booking-service/target/*.jar app.jar
 
 # Port servisa
 ENV SERVER_PORT=8083

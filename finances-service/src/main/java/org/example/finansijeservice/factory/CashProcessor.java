@@ -13,6 +13,6 @@ public class CashProcessor implements PaymentProcessor {
 
     @Override
     public String getSupportedMethod() {
-        return "CASH";
+        return "Gotovina";
     }
 }

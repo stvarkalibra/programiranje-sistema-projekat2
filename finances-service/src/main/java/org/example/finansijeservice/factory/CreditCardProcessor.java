@@ -13,6 +13,6 @@ public class CreditCardProcessor implements PaymentProcessor {
 
     @Override
     public String getSupportedMethod() {
-        return "CREDIT_CARD";
+        return "Kreditna kartica";
     }
 }
