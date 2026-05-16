@@ -9,6 +9,7 @@ import org.example.rezervacijeservice.dto.BookingResponse;
 import org.example.rezervacijeservice.dto.UpdateBookingDTO;
 import org.example.rezervacijeservice.model.BookingStatus;
 import org.example.rezervacijeservice.service.BookingService;
+import org.example.rezervacijeservice.service.CancelledBookingProducer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,11 @@ import java.util.List;
 public class BookingController {
 
 
-
+    private final CancelledBookingProducer cancelledBookingProducer;
     private final BookingService bookingService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(CancelledBookingProducer cancelledBookingProducer, BookingService bookingService) {
+        this.cancelledBookingProducer = cancelledBookingProducer;
         this.bookingService = bookingService;
     }
 
@@ -170,8 +172,7 @@ public class BookingController {
     public ResponseEntity<BookingResponse> updateBookingRabbitMQ(
             @PathVariable
             @Schema(description = "Booking ID", example = "6")
-            Long id,
-            @RequestBody @Valid UpdateBookingDTO request) {
-        return ResponseEntity.ok(bookingService.updateBooking(id, request));
+            Long id) {
+        return ResponseEntity.ok(cancelledBookingProducer.cancelBooking(id));
     }
 }

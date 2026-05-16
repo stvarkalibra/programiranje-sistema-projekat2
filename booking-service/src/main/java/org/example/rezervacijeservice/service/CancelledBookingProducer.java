@@ -2,7 +2,9 @@ package org.example.rezervacijeservice.service;
 
 import lombok.AllArgsConstructor;
 import org.example.rezervacijeservice.config.RabbitMQConfig;
+import org.example.rezervacijeservice.dto.BookingResponse;
 import org.example.rezervacijeservice.exception.ResourceNotFoundException;
+import org.example.rezervacijeservice.mapper.BookingResponseMapperImpl;
 import org.example.rezervacijeservice.model.Booking;
 import org.example.rezervacijeservice.model.BookingStatus;
 import org.example.rezervacijeservice.repository.BookingRepository;
@@ -15,8 +17,9 @@ import org.springframework.stereotype.Service;
 public class CancelledBookingProducer {
     private final BookingRepository bookingRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final BookingResponseMapperImpl mapper;
 
-    public void cancelBooking(Long id){
+    public BookingResponse cancelBooking(Long id){
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
@@ -27,13 +30,15 @@ public class CancelledBookingProducer {
                 booking.getEndDate()
         );
 
+        Booking saved = bookingRepository.save(booking);
+
         System.out.println("Slanje BookingCancelledEventDTO za bookingId: " + event.getBookingId());
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.AVAILABILITY_EXCHANGE,
                 RabbitMQConfig.AVAILABILITY_ROUTING_KEY,
                 event
         );
-
+        return mapper.toBookingResponse(saved);
     }
 
 }
