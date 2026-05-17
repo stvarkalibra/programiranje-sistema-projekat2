@@ -52,3 +52,16 @@ INSERT INTO booking_status_log (booking_id, old_status, new_status, changed_date
     (5, 'PENDING',    'CONFIRMED',  '2026-05-25 08:00:00'),
     (6, 'PENDING',    'CONFIRMED',  '2026-02-27 13:20:00'),
     (6, 'CONFIRMED',  'COMPLETED',  '2026-03-05 11:00:00');
+
+-- Rezervacije koje treba da se otkažu kada se obriše TimeSlot 1:
+-- TimeSlot 1 = 2026-06-01 10:00:00 do 2026-06-01 14:00:00
+
+INSERT INTO booking (unit_id, guest_id, cancellation_policy_id, start_date, end_date, total_price, status) VALUES
+                                                                                                               (99, 1, 1, '2026-06-01 10:00:00', '2026-06-01 14:00:00', 12000.00, 'CONFIRMED'),
+                                                                                                               (88, 2, 1, '2026-06-01 11:00:00', '2026-06-01 13:00:00', 8000.00, 'PENDING'),
+                                                                                                               (77, 3, 2, '2026-06-01 12:00:00', '2026-06-01 13:30:00', 6000.00, 'CONFIRMED');
+
+-- Rezervacije koje NE treba da se otkažu:
+INSERT INTO booking (unit_id, guest_id, cancellation_policy_id, start_date, end_date, total_price, status) VALUES
+                                                                                                               (66, 4, 1, '2026-06-01 15:00:00', '2026-06-01 16:00:00', 5000.00, 'CONFIRMED'),
+                                                                                                               (55, 5, 1, '2026-06-02 10:00:00', '2026-06-02 14:00:00', 7000.00, 'CONFIRMED');

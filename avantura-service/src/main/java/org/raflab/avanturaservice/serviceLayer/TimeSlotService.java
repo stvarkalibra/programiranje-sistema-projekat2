@@ -6,6 +6,7 @@ import org.raflab.avanturaservice.dtoLayer.request.TimeSlotRequest;
 import org.raflab.avanturaservice.dtoLayer.response.TimeSlotResponse;
 import org.raflab.avanturaservice.entityLayer.Adventure;
 import org.raflab.avanturaservice.entityLayer.TimeSlot;
+import org.raflab.avanturaservice.messaging.TimeSlotDeletedEventPublisher;
 import org.raflab.avanturaservice.repositoryLayer.AdventureRepository;
 import org.raflab.avanturaservice.repositoryLayer.TimeSlotRepository;
 import org.raflab.avanturaservice.utils.TimeSlotEntityMapper;
@@ -24,6 +25,7 @@ public class TimeSlotService {
     private final TimeSlotRepository timeSlotRepository;
     private final AdventureRepository adventureRepository;
     private final TimeSlotEntityMapper mapper;
+    private final TimeSlotDeletedEventPublisher timeSlotDeletedEventPublisher;
 
     @Transactional
     public TimeSlotResponse createTimeSlot(TimeSlotRequest request) {
@@ -80,20 +82,17 @@ public class TimeSlotService {
 
     @Transactional
     public void deleteTimeSlot(Long id) {
-        TimeSlot slot = timeSlotRepository.findById(id)
+        TimeSlot timeSlot = timeSlotRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Termin nije pronađen."
+                        "Time slot sa ID " + id + " ne postoji."
                 ));
 
-        if (slot.getCurrentOccupancy() > 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Ne možete obrisati termin u kojem već ima prijavljenih učesnika."
-            );
-        }
+        timeSlotDeletedEventPublisher.publishTimeSlotDeleted(timeSlot);
 
-        timeSlotRepository.deleteById(id);
+        timeSlotRepository.delete(timeSlot);
+
+        System.out.println(">>> TIME SLOT OBRISAN I POSLAT EVENT ZA BOOKING, timeSlotId=" + id);
     }
 
     private void validateTimeLogic(LocalDateTime start, LocalDateTime end) {

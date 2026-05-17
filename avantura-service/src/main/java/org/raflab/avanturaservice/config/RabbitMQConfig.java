@@ -101,6 +101,20 @@ public class RabbitMQConfig {
     }
 
     // ============================================================
+    // 4) AVANTURA -> BOOKING
+    // Kada se obriše TimeSlot, booking-service otkazuje sve rezervacije
+    // koje imaju isti startTime i endTime
+    // ============================================================
+
+    public static final String TIME_SLOT_DELETED_EXCHANGE = "time_slot_deleted_exchange";
+    public static final String TIME_SLOT_DELETED_ROUTING_KEY = "time.slot.deleted";
+
+    @Bean
+    public TopicExchange timeSlotDeletedExchange() {
+        return new TopicExchange(TIME_SLOT_DELETED_EXCHANGE, true, false);
+    }
+
+    // ============================================================
     // ZAJEDNIČKA RABBITMQ PODEŠAVANJA
     // ============================================================
 
