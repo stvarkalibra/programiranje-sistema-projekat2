@@ -3,11 +3,13 @@ package org.raflab.guideservice.serviceLayer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import org.example.sharedmodule.GuideRatingChangedEventDTO;
 import org.raflab.guideservice.clientLayer.AdventureClient;
 import org.raflab.guideservice.clientLayer.RemoteAdventureDTO;
 import org.raflab.guideservice.dtoLayer.request.GuideProfileRequest;
 import org.raflab.guideservice.dtoLayer.response.GuideProfileResponse;
 import org.raflab.guideservice.entityLayer.GuideProfile;
+import org.raflab.guideservice.messaging.GuideRatingChangedProducer;
 import org.raflab.guideservice.repositoryLayer.CertificationRepository;
 import org.raflab.guideservice.repositoryLayer.GuideLanguageRepository;
 import org.raflab.guideservice.repositoryLayer.GuideProfileRepository;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,7 @@ public class GuideProfileService {
     private final CertificationRepository certificationRepository;
     private final GuideLanguageRepository guideLanguageRepository;
     private final AdventureClient adventureClient;
+    private final GuideRatingChangedProducer guideRatingChangedProducer;
 
     @Transactional
     public GuideProfileResponse createGuide(GuideProfileRequest request) {
@@ -138,6 +142,32 @@ public class GuideProfileService {
         }
 
         return mapper.toResponse(guideRepository.save(guide));
+    }
+
+    @Transactional
+    public GuideProfileResponse updateGuideRatingAsync(Long guideId, Double newRating) {
+        GuideProfile guide = guideRepository.findById(guideId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Vodič ID " + guideId + " ne postoji."
+                ));
+
+        Double oldRating = guide.getRating();
+
+        guide.setRating(newRating);
+        GuideProfile savedGuide = guideRepository.save(guide);
+
+        GuideRatingChangedEventDTO event = new GuideRatingChangedEventDTO(
+                savedGuide.getId(),
+                savedGuide.getFirstName() + " " + savedGuide.getLastName(),
+                oldRating,
+                newRating,
+                LocalDateTime.now()
+        );
+
+        guideRatingChangedProducer.sendGuideRatingChangedEvent(event);
+
+        return mapper.toResponse(savedGuide);
     }
 
     public Map<String, Long> getRatingDistribution() {

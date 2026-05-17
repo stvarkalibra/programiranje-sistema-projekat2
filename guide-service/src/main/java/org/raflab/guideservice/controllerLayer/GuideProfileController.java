@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.raflab.guideservice.clientLayer.RemoteAdventureDTO;
 import org.raflab.guideservice.dtoLayer.request.GuideProfileRequest;
+import org.raflab.guideservice.dtoLayer.request.GuideRatingUpdateRequest;
 import org.raflab.guideservice.dtoLayer.response.GuideProfileResponse;
 import org.raflab.guideservice.serviceLayer.GuideProfileService;
 import org.springframework.http.HttpStatus;
@@ -82,6 +83,14 @@ public class GuideProfileController {
         return ResponseEntity.ok(guideService.applyLanguageBonus(id));
     }
 
+    @Operation(summary = "Asinhrona izmena rating-a vodiča i slanje RabbitMQ event-a ka avantura-service")
+    @PostMapping("/{id}/rating-change-async")
+    public ResponseEntity<GuideProfileResponse> changeRatingAsync(
+            @PathVariable Long id,
+            @Valid @RequestBody GuideRatingUpdateRequest request) {
+        return ResponseEntity.ok(guideService.updateGuideRatingAsync(id, request.getNewRating()));
+    }
+
     @Operation(summary = "Statistika raspodele vodiča po kvalitetu (Gold/Silver/Bronze)")
     @GetMapping("/stats/rating-distribution")
     public ResponseEntity<Map<String, Long>> getStats() {
@@ -123,5 +132,4 @@ public class GuideProfileController {
     public ResponseEntity<List<RemoteAdventureDTO>> getByCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok(guideService.getAllInCategory(categoryId));
     }
-
 }

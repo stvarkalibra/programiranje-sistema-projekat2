@@ -21,12 +21,12 @@ services:
     environment:
       MYSQL_DATABASE: eco_tourism_db
       MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3307:3306"
+#    ports:
+#      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,8 +36,8 @@ services:
   auth-service:
     build: ./auth-service
     container_name: auth-cont
-    ports:
-      - "8086:8085"
+#    ports:
+#      - "8086:8085"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8085
@@ -143,10 +143,12 @@ services:
       - backend-network
 
   guide-service:
-    build: ./guide-service
+    build:
+      context: .
+      dockerfile: guide-service/Dockerfile
     container_name: guide-cont
-    ports:
-      - "8087:8087"
+    #    ports:
+    #      - "8087:8087"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
@@ -156,10 +158,16 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - GATEWAY_URL=http://localhost:8080
       - AVANTURA_SERVICE_URL=http://avantura-service:8088
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
       avantura-service:
         condition: service_started
@@ -167,10 +175,12 @@ services:
       - backend-network
 
   avantura-service:
-    build: ./avantura-service
+    build:
+      context: .
+      dockerfile: avantura-service/Dockerfile
     container_name: avantura-cont
-    ports:
-      - "8088:8088"
+    #    ports:
+    #      - "8088:8088"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -179,10 +189,16 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - GATEWAY_URL=http://localhost:8080
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - backend-network
