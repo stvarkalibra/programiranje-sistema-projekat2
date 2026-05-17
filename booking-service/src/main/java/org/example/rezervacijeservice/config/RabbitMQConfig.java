@@ -14,15 +14,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+
     public static final String QUEUE = "transaction_queue";
     public static final String EXCHANGE = "transaction_exchange";
     public static final String ROUTING_KEY = "transaction_routing_key";
 
     @Bean
-    public Queue queue() { return new Queue(QUEUE); }
+    public Queue queue() {
+        return new Queue(QUEUE);
+    }
 
     @Bean
-    public TopicExchange exchange() { return new TopicExchange(EXCHANGE); }
+    public TopicExchange exchange() {
+        return new TopicExchange(EXCHANGE);
+    }
 
     @Bean
     public Binding binding(Queue queue, TopicExchange exchange) {
@@ -48,16 +53,19 @@ public class RabbitMQConfig {
         };
     }
 
-
     public static final String AVAILABILITY_QUEUE = "availability_queue";
     public static final String AVAILABILITY_EXCHANGE = "availability_exchange";
     public static final String AVAILABILITY_ROUTING_KEY = "availability_routing_key";
 
     @Bean
-    public Queue availabilityQueue() { return new Queue(AVAILABILITY_QUEUE); }
+    public Queue availabilityQueue() {
+        return new Queue(AVAILABILITY_QUEUE);
+    }
 
     @Bean
-    public TopicExchange availabilityExchange() { return new TopicExchange(AVAILABILITY_EXCHANGE); }
+    public TopicExchange availabilityExchange() {
+        return new TopicExchange(AVAILABILITY_EXCHANGE);
+    }
 
     @Bean
     public Binding availabilityBinding() {
@@ -83,4 +91,30 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(bookingFeedbackQueue).to(bookingFeedbackExchange).with(BOOKING_FEEDBACK_KEY);
     }
 
+    // ============================================================
+    // AVANTURA -> BOOKING
+    // Kada se obriše TimeSlot, booking-service otkazuje rezervacije
+    // ============================================================
+
+    public static final String TIME_SLOT_DELETED_QUEUE = "booking_time_slot_deleted_queue";
+    public static final String TIME_SLOT_DELETED_EXCHANGE = "time_slot_deleted_exchange";
+    public static final String TIME_SLOT_DELETED_ROUTING_KEY = "time.slot.deleted";
+
+    @Bean
+    public Queue timeSlotDeletedQueue() {
+        return new Queue(TIME_SLOT_DELETED_QUEUE, true);
+    }
+
+    @Bean
+    public TopicExchange timeSlotDeletedExchange() {
+        return new TopicExchange(TIME_SLOT_DELETED_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public Binding timeSlotDeletedBinding() {
+        return BindingBuilder
+                .bind(timeSlotDeletedQueue())
+                .to(timeSlotDeletedExchange())
+                .with(TIME_SLOT_DELETED_ROUTING_KEY);
+    }
 }
