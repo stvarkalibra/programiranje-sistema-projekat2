@@ -3,6 +3,7 @@ package com.ecotravel.maintenance.service;
 import com.ecotravel.maintenance.dto.request.WorkOrderRequestDTO;
 import com.ecotravel.maintenance.dto.request.WorkOrderStatusUpdateDTO;
 import com.ecotravel.maintenance.dto.response.WorkOrderResponseDTO;
+import com.ecotravel.maintenance.messaging.WorkOrderEventPublisher;
 import com.ecotravel.maintenance.model.MaintenanceTask;
 import com.ecotravel.maintenance.model.WorkOrder;
 import com.ecotravel.maintenance.model.Worker;
@@ -26,6 +27,7 @@ public class WorkOrderService {
     private final MaintenanceTaskService maintenanceTaskService;
     private final WorkerService workerService;
     private final AccommodationIntegrationService integrationService;
+    private final WorkOrderEventPublisher workOrderEventPublisher; // << NOVO
 
     public List<WorkOrderResponseDTO> getAll() {
         return workOrderRepository.findAll()
@@ -59,7 +61,6 @@ public class WorkOrderService {
 
         MaintenanceTask task = maintenanceTaskService.findTaskById(dto.getTaskId());
 
-        // Validacija kroz accommodation servis (sa Circuit Breaker zastitom)
         LocalDateTime scheduled = dto.getScheduledFor();
         integrationService.validateWorkOrderCreation(
                 dto.getUnitId(),
@@ -79,6 +80,11 @@ public class WorkOrderService {
         return convertToDTO(saved);
     }
 
+    /**
+     * Ažurira status radnog naloga.
+     * Kada status pređe u COMPLETED, publishuje WorkOrderCompletedEvent.
+     * Accommodation servis sluša i automatski briše MAINTENANCE blokadu iz kalendara.
+     */
     public WorkOrderResponseDTO updateStatus(Long id, WorkOrderStatusUpdateDTO dto) {
         WorkOrder order = findOrderById(id);
         String newStatus = dto.getStatus().toUpperCase();
@@ -87,7 +93,22 @@ public class WorkOrderService {
         order.setStatus(newStatus);
 
         if ("COMPLETED".equals(newStatus)) {
-            order.setCompletedAt(LocalDateTime.now());
+            LocalDateTime completedAt = LocalDateTime.now();
+            order.setCompletedAt(completedAt);
+
+            WorkOrder saved = workOrderRepository.save(order);
+
+            // Publishuj asinhroni događaj NAKON uspješnog upisa
+            workOrderEventPublisher.publishWorkOrderCompleted(
+                    saved.getId(),
+                    saved.getUnitId(),
+                    saved.getTask().getTaskName(),
+                    saved.getWorker().getFirstName() + " " + saved.getWorker().getLastName(),
+                    completedAt,
+                    saved.getScheduledFor()
+            );
+
+            return convertToDTO(saved);
         }
 
         return convertToDTO(workOrderRepository.save(order));
@@ -104,17 +125,19 @@ public class WorkOrderService {
         if (currentStatus.equals(newStatus)) {
             throw new IllegalArgumentException("Radni nalog je vec u statusu: " + currentStatus);
         }
-        if ("COMPLETED".equals(currentStatus)) {
-            throw new IllegalArgumentException("Zavrseni radni nalog ne moze mijenjati status");
+        if ("COMPLETED".equals(currentStatus) || "CANCELLED".equals(currentStatus)) {
+            throw new IllegalArgumentException(
+                    "Završeni ili otkazani radni nalog ne može mijenjati status");
         }
         if ("IN_PROGRESS".equals(currentStatus) && "PENDING".equals(newStatus)) {
             throw new IllegalArgumentException(
                     "Status ne moze ici unazad (IN_PROGRESS -> PENDING nije dozvoljeno)");
         }
-        List<String> validStatuses = List.of("PENDING", "IN_PROGRESS", "COMPLETED");
+        List<String> validStatuses = List.of("PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED");
         if (!validStatuses.contains(newStatus)) {
             throw new IllegalArgumentException(
-                    "Nevalidan status: " + newStatus + ". Dozvoljeni: PENDING, IN_PROGRESS, COMPLETED");
+                    "Nevalidan status: " + newStatus +
+                            ". Dozvoljeni: PENDING, IN_PROGRESS, COMPLETED, CANCELLED");
         }
     }
 

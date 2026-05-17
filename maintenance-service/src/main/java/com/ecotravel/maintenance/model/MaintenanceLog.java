@@ -18,8 +18,8 @@ public class MaintenanceLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ID smjestajne jedinice iz accommodation-service (nema FK jer su odvojene baze)
-    @Column(name = "unit_id", nullable = false)
+    // nullable=true jer sistemski logovi (SYSTEM events) možda nemaju unitId
+    @Column(name = "unit_id", nullable = true)
     private Long unitId;
 
     @Column(name = "task_description", nullable = false)
@@ -28,7 +28,7 @@ public class MaintenanceLog {
     @Column(name = "worker_name", nullable = false)
     private String workerName;
 
-    @Column(name = "completed_at", nullable = false)
+    @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
     @Column(columnDefinition = "TEXT")

@@ -21,8 +21,8 @@ services:
     environment:
       MYSQL_DATABASE: eco_tourism_db
       MYSQL_ROOT_PASSWORD: root
-#    ports:
-#      - "3307:3306"
+    #    ports:
+    #      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -33,11 +33,24 @@ services:
     networks:
       - backend-network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - frontend-network
+      - backend-network
+
   auth-service:
     build: ./auth-service
     container_name: auth-cont
-#    ports:
-#      - "8086:8085"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8085
@@ -104,6 +117,10 @@ services:
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
       - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -130,6 +147,10 @@ services:
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
       - BOOKING_SERVICE_URL=http://booking-service:8083
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -147,8 +168,6 @@ services:
       context: .
       dockerfile: guide-service/Dockerfile
     container_name: guide-cont
-    #    ports:
-    #      - "8087:8087"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8087
@@ -179,8 +198,6 @@ services:
       context: .
       dockerfile: avantura-service/Dockerfile
     container_name: avantura-cont
-    #    ports:
-    #      - "8088:8088"
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -204,7 +221,9 @@ services:
       - backend-network
 
   accommodation-service:
-    build: ./accommodation-service
+    build:
+      context: .
+      dockerfile: accommodation-service/Dockerfile
     container_name: accommodation-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
@@ -215,16 +234,25 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - backend-network
 
+
   maintenance-service:
-    build: ./maintenance-service
+    build:
+      context: .
+      dockerfile: maintenance-service/Dockerfile
     container_name: maintenance-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
@@ -236,10 +264,16 @@ services:
       - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
       - SPRINGDOC_SERVER_URL=http://localhost:8080
       - GATEWAY_URL=http://localhost:8080
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-mysql:
         condition: service_healthy
       config-service:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
       accommodation-service:
         condition: service_started
@@ -251,22 +285,6 @@ services:
     container_name: adminer-cont
     ports:
       - "8085:8080"
-    networks:
-      - frontend-network
-      - backend-network
-
-  #7. RabbitMQ
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    ports:
-      - "5672:5672"
-      - "15672:15672"
     networks:
       - frontend-network
       - backend-network

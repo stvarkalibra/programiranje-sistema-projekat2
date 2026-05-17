@@ -11,4 +11,6 @@ public interface MaintenanceTaskRepository extends JpaRepository<MaintenanceTask
 
     // Filtriranje po maksimalnom trajanju
     List<MaintenanceTask> findByEstimatedDurationHoursLessThanEqual(Integer maxHours);
+    List<MaintenanceTask> findByTaskNameContainingIgnoreCase(String keyword);
+
 }
