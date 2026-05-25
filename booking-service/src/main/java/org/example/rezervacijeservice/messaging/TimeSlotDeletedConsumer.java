@@ -1,4 +1,4 @@
-package org.example.rezervacijeservice.service;
+package org.example.rezervacijeservice.messaging;
 
 import lombok.RequiredArgsConstructor;
 import org.example.rezervacijeservice.config.RabbitMQConfig;
