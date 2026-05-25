@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.ApplicationRunner;
@@ -78,17 +79,20 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue bookingFeedbackQueue() {
-        return new Queue(BOOKING_FEEDBACK_QUEUE);
+        return new Queue(BOOKING_FEEDBACK_QUEUE, true);
     }
 
     @Bean
     public TopicExchange bookingFeedbackExchange() {
-        return new TopicExchange(BOOKING_FEEDBACK_EXCHANGE);
+        return new TopicExchange(BOOKING_FEEDBACK_EXCHANGE, true, false);
     }
 
     @Bean
-    public Binding bookingFeedbackBinding(Queue bookingFeedbackQueue, TopicExchange bookingFeedbackExchange) {
-        return BindingBuilder.bind(bookingFeedbackQueue).to(bookingFeedbackExchange).with(BOOKING_FEEDBACK_KEY);
+    public Binding bookingFeedbackBinding() {
+        return BindingBuilder
+                .bind(bookingFeedbackQueue())
+                .to(bookingFeedbackExchange())
+                .with(BOOKING_FEEDBACK_KEY);
     }
 
     // ============================================================
@@ -116,5 +120,13 @@ public class RabbitMQConfig {
                 .bind(timeSlotDeletedQueue())
                 .to(timeSlotDeletedExchange())
                 .with(TIME_SLOT_DELETED_ROUTING_KEY);
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+                                         MessageConverter jsonMessageConverter) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter);
+        return rabbitTemplate;
     }
 }

@@ -20,6 +20,8 @@ public class RabbitMQConfig {
     public static final String GUIDE_RATING_EXCHANGE = "guide_rating_changed_exchange";
     public static final String GUIDE_RATING_ROUTING_KEY = "guide.rating.changed";
 
+
+
     @Bean
     public Queue guideRatingChangedQueue() {
         return new Queue(GUIDE_RATING_QUEUE, true);
@@ -62,5 +64,32 @@ public class RabbitMQConfig {
             rabbitAdmin.initialize();
             System.out.println(">>> GUIDE RabbitMQ redovi/exchange/binding su deklarisani.");
         };
+    }
+
+    // ============================================================
+    // AVANTURA -> GUIDE FEEDBACK
+    // Avantura-service vraća informaciju da li je rating event obrađen
+    // ============================================================
+
+    public static final String GUIDE_RATING_FEEDBACK_QUEUE = "guide_rating_feedback_queue";
+    public static final String GUIDE_RATING_FEEDBACK_EXCHANGE = "guide_rating_feedback_exchange";
+    public static final String GUIDE_RATING_FEEDBACK_ROUTING_KEY = "guide.rating.feedback";
+
+    @Bean
+    public Queue guideRatingFeedbackQueue() {
+        return new Queue(GUIDE_RATING_FEEDBACK_QUEUE, true);
+    }
+
+    @Bean
+    public TopicExchange guideRatingFeedbackExchange() {
+        return new TopicExchange(GUIDE_RATING_FEEDBACK_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public Binding guideRatingFeedbackBinding() {
+        return BindingBuilder
+                .bind(guideRatingFeedbackQueue())
+                .to(guideRatingFeedbackExchange())
+                .with(GUIDE_RATING_FEEDBACK_ROUTING_KEY);
     }
 }

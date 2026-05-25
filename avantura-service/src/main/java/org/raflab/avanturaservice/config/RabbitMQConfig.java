@@ -75,7 +75,6 @@ public class RabbitMQConfig {
     // 3) AVANTURA -> BOOKING FEEDBACK
     // Avantura-service šalje običan String nazad booking-service-u:
     // "USPEŠNO: ..." ili "NEUSPEŠNO: ..."
-    // Ovo mora da bude isto kao u booking-service RabbitMQConfig
     // ============================================================
 
     public static final String BOOKING_FEEDBACK_QUEUE = "booking_feedback_queue";
@@ -112,6 +111,19 @@ public class RabbitMQConfig {
     @Bean
     public TopicExchange timeSlotDeletedExchange() {
         return new TopicExchange(TIME_SLOT_DELETED_EXCHANGE, true, false);
+    }
+
+    // ============================================================
+    // AVANTURA -> GUIDE FEEDBACK
+    // Avantura-service šalje informaciju guide-service-u
+    // ============================================================
+
+    public static final String GUIDE_RATING_FEEDBACK_EXCHANGE = "guide_rating_feedback_exchange";
+    public static final String GUIDE_RATING_FEEDBACK_ROUTING_KEY = "guide.rating.feedback";
+
+    @Bean
+    public TopicExchange guideRatingFeedbackExchange() {
+        return new TopicExchange(GUIDE_RATING_FEEDBACK_EXCHANGE, true, false);
     }
 
     // ============================================================
