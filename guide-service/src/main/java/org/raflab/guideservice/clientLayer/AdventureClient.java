@@ -2,13 +2,14 @@ package org.raflab.guideservice.clientLayer;
 
 import org.raflab.guideservice.config.FeignRequestInterceptorConfig;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @FeignClient(
         name = "avantura-service",
-        url = "${AVANTURA_SERVICE_URL:http://localhost:8088}",
         configuration = FeignRequestInterceptorConfig.class
 )
 public interface AdventureClient {
