@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="avantura-service"/>
+    <springProperty scope="context" name="instanceId" source="instance.id" defaultValue="avantura-local"/>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://loki:3100/loki/api/v1/push</url>
+        </http>
+
+        <format>
+            <encoder class="com.github.loki4j.logback.Loki4jEncoder">
+                <label>
+                    <pattern>app=${appName},instance=${instanceId},level=%level,traceId=%X{traceId}</pattern>
+                </label>
+                <message class="com.github.loki4j.logback.JsonLayout"/>
+            </encoder>
+        </format>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOKI"/>
+    </root>
+
+</configuration>

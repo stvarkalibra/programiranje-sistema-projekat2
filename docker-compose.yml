@@ -67,6 +67,49 @@ services:
     networks:
       - backend-network
 
+  discovery-service:
+    build:
+      context: .
+      dockerfile: discovery-service/Dockerfile
+    container_name: discovery-cont
+    ports:
+      - "8761:8761"
+    environment:
+      - SERVER_PORT=8761
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://localhost:8761/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+    networks:
+      - backend-network
+      - frontend-network
+
+  loki:
+    image: grafana/loki:2.9.8
+    container_name: loki-cont
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - backend-network
+      - frontend-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana-cont
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - loki
+    networks:
+      - backend-network
+      - frontend-network
+
   gateway-service:
     build: ./gateway-service
     container_name: gateway-cont
@@ -82,6 +125,7 @@ services:
       - ACCOMMODATION_SERVICE_URL=http://accommodation-service:8081
       - MAINTENANCE_SERVICE_URL=http://maintenance-service:8082
       - AUTH_SERVICE_URL=http://auth-service:8085
+      - EUREKA_URL=http://discovery-service:8761/eureka
     depends_on:
       config-service:
         condition: service_healthy
@@ -98,6 +142,10 @@ services:
       accommodation-service:
         condition: service_started
       maintenance-service:
+        condition: service_started
+      discovery-service:
+        condition: service_healthy
+      loki:
         condition: service_started
     networks:
       - frontend-network
@@ -181,6 +229,7 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - EUREKA_URL=http://discovery-service:8761/eureka
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -190,6 +239,10 @@ services:
         condition: service_healthy
       avantura-service:
         condition: service_started
+      discovery-service:
+        condition: service_healthy
+      loki:
+        condition: service_started
     networks:
       - backend-network
 
@@ -197,7 +250,6 @@ services:
     build:
       context: .
       dockerfile: avantura-service/Dockerfile
-    container_name: avantura-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SERVER_PORT=8088
@@ -206,6 +258,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - GATEWAY_URL=http://localhost:8080
+      - EUREKA_URL=http://discovery-service:8761/eureka
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
@@ -215,8 +268,12 @@ services:
         condition: service_healthy
       config-service:
         condition: service_healthy
+      discovery-service:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      loki:
+        condition: service_started
     networks:
       - backend-network
 
