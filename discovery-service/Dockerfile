@@ -5,12 +5,12 @@ COPY discovery-service/pom.xml .
 RUN mvn dependency:go-offline -B
 
 COPY discovery-service/src ./src
-RUN mvn clean package -DskipTests
+RUN mvn clean package spring-boot:repackage -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/discovery-service.jar app.jar
 
 ENV SERVER_PORT=8761
 
