@@ -150,16 +150,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
                     return chain.filter(exchange.mutate().request(modifiedRequest).build())
                             .doOnSubscribe(sub -> exchange.getResponse().beforeCommit(() -> {
-                                exchange.getResponse().getHeaders()
-                                        .add("X-Processing-Time", (System.currentTimeMillis() - startTime) + "ms");
-                                exchange.getResponse().getHeaders()
-                                        .add(X_TRACE_ID, traceId);
-                                exchange.getResponse().getHeaders()
-                                        .add(TRACEPARENT, traceparent);
-                                exchange.getResponse().getHeaders()
-                                        .add("X-Eco-Service-Status", "ECO-TOURISM-OK");
-                                exchange.getResponse().getHeaders()
-                                        .add("X-Served-By", "Gateway-v1.0");
+                                exchange.getResponse().getHeaders().set("X-Processing-Time", (System.currentTimeMillis() - startTime) + "ms");
+                                exchange.getResponse().getHeaders().set("X-Trace-Id", traceId);
+                                exchange.getResponse().getHeaders().set("traceparent", traceparent);
+                                exchange.getResponse().getHeaders().set("X-Eco-Service-Status", "ECO-TOURISM-OK");
+                                exchange.getResponse().getHeaders().set("X-Served-By", "Gateway-v1.0");
                                 return Mono.empty();
                             }));
                 })
@@ -182,9 +177,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
 
         response.setStatusCode(status);
-        response.getHeaders().add("Content-Type", "application/json");
-        response.getHeaders().add(X_TRACE_ID, traceId);
-        response.getHeaders().add(TRACEPARENT, traceparent);
+        response.getHeaders().set("Content-Type", "application/json");
+        response.getHeaders().set(X_TRACE_ID, traceId);
+        response.getHeaders().set(TRACEPARENT, traceparent);
 
         String timestamp = LocalDateTime.now().toString();
 
