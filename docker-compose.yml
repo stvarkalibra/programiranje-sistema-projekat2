@@ -116,7 +116,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - loki
     networks:
@@ -168,7 +168,6 @@ services:
     build:
       context: .
       dockerfile: booking-service/Dockerfile
-    container_name: booking-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
@@ -182,6 +181,9 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    deploy:
+      replicas: 3
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -190,6 +192,10 @@ services:
       rabbitmq:
         condition: service_healthy
       accommodation-service:
+        condition: service_started
+      loki:
+        condition: service_started
+      discovery-service:
         condition: service_started
     networks:
       - backend-network
@@ -212,6 +218,7 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
     depends_on:
       db-mysql:
         condition: service_healthy
@@ -220,6 +227,10 @@ services:
       rabbitmq:
         condition: service_healthy
       booking-service:
+        condition: service_started
+      loki:
+          condition: service_started
+      discovery-service:
         condition: service_started
     networks:
       - backend-network
