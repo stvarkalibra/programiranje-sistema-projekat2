@@ -1,0 +1,20 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      maxLines: 1000
+
+  - name: MySQL-Booking
+    type: mysql
+    access: proxy
+    url: db-mysql:3306
+    user: root
+    database: eco_tourism_db
+    secureJsonData:
+      password: root
+    jsonData:
+      sslmode: "disable"
