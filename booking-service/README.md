@@ -6,11 +6,14 @@
 |---|---|
 | **Framework** | Spring Boot 3.5.11 |
 | **Jezik** | Java 21 |
-| **Baza podataka** | H2 (in-memory) |
+| **Baza podataka** | MySQL 8.0 (Docker kontejner `db-mysql`, baza `eco_tourism_db`) |
 | **Port** | `8083` |
+| **Skaliranje** | 3 Docker replike (`deploy.replicas: 3`) |
+| **Servisni registar** | Eureka (`http://discovery-service:8761`) |
 | **Dokumentacija** | Swagger UI kroz Gateway: `http://localhost:8080/swagger-ui.html` |
-| **H2 konzola** | `http://localhost:8083/h2-console` |
-| **Config Server** | `http://localhost:8888` (opciono) |
+| **Config Server** | `http://localhost:8888` |
+| **Logovi** | Konzola + Loki (`http://loki:3100`) |
+| **Tracing** | Zipkin (`http://zipkin:9411`), W3C `traceparent` format |
 
 ---
 
@@ -70,9 +73,55 @@ CancellationStrategyResolver.resolve(policy) → bira strategiju
 
 `CorrelationIdFilter` automatski prima `X-Trace-Id` header i upisuje ga u MDC. `FeignClientInterceptor` propagira tri headera na svaki izlazni Feign poziv: `X-Trace-Id`, `X-Authenticated-User`, `X-User-Role`.
 
-Format logova:
+API Gateway generiše `traceparent` header u W3C formatu (`00-{traceId}-{spanId}-01`) i propagira ga kroz celu mrežu. Svaki mikroservis nasljeđuje `traceId` i upisuje ga u sve logove putem MDC-a.
+
+Format konzolnih logova:
 ```
-2026-04-14 10:15:30 [http-nio-8083-exec-1] INFO [traceId=abc123] ...
+2026-04-14 10:15:30 [http-nio-8083-exec-1] INFO  [rezervacije-service] [traceId=abc123def456] o.e.r.s.BookingService - Rezervacija kreirana
+```
+
+---
+
+## Asinhrona komunikacija (RabbitMQ)
+
+Booking servis učestvuje u Event-Driven arhitekturi kroz RabbitMQ broker. Sve izmene stanja koje imaju poslovni uticaj na ostatak sistema objavljuju se kao poruke — servis ne čeka odgovor i ostaje potpuno operativan čak i kada su zavisni servisi nedostupni.
+
+### Konfiguracija redova i razmenjivača
+
+| Red | Razmenjivač | Routing ključ | Smer | Uloga |
+|-----|------------|---------------|------|-------|
+| `transaction_queue` | `transaction_exchange` | `transaction_routing_key` | Šalje → Finansije | Finansijski događaji pri promeni statusa rezervacije |
+| `availability_queue` | `availability_exchange` | `availability_routing_key` | Šalje → Avantura | Obaveštava o promeni dostupnosti (otkazivanje) |
+| `booking_feedback_queue` | `booking_feedback_exchange` | `booking_feedback_key` | Prima ← Finansije | Povratna informacija o uspešnoj obradi transakcije |
+| `booking_time_slot_deleted_queue` | `time_slot_deleted_exchange` | `time.slot.deleted` | Prima ← Avantura | Brisanje termina — automatski otkazuje rezervacije |
+
+### Događaji koje servis objavljuje
+
+| Operacija | Red | Sadržaj poruke |
+|-----------|-----|----------------|
+| `PATCH /api/bookings/{id}/status` → CONFIRMED | `transaction_exchange` | `bookingId`, `totalPrice`, `guestId` |
+| `PATCH /api/bookings/{id}/status` → CANCELLED | `availability_exchange` | `unitId`, `startDate`, `endDate` |
+| `DELETE /api/add-on-items/{id}` | `availability_exchange` | `bookingId`, tip promene |
+
+### Otpornost na greške
+
+- Poruke koje nisu isporučene ostaju u redu sve dok potrošač ne postane dostupan — nema gubitka podataka
+- Booking servis ne blokira HTTP zahtev čekanjem na potvrdu od Finansije servisa
+- `booking_feedback_queue` je trajan (`durable=true`) — preživljava restart brokera
+- Demonstracija: terminacijom `finances-service` kontejnera poruke se akumuliraju u redu i automatski obrađuju pri ponovnom pokretanju
+
+### Tok poruke (primer: potvrda rezervacije)
+
+```
+POST /api/bookings/{id}/status?status=CONFIRMED
+        ↓
+BookingService.updateStatus()
+        ↓
+RabbitTemplate.convertAndSend("transaction_exchange", "transaction_routing_key", event)
+        ↓
+[RabbitMQ broker — transaction_queue]
+        ↓
+finances-service: TransactionEventListener.onTransactionEvent()
 ```
 
 ---
@@ -232,42 +281,32 @@ Format logova:
 
 ---
 
-## Lokalno pokretanje
+## Pokretanje sistema (Docker Compose)
 
-### Preduslovi
-- Java 21
-- Maven 3.6+
-
-### Redosled pokretanja celog sistema
-
-```
-1. config-service     (port 8888)  ← prvi obavezno
-2. auth-service       (port 8085)
-3. smestaj-service    (port 8081)  ← booking-service zavisi od ovog
-4. booking-service    (port 8083)  ← ovaj servis
-5. finansije-service  (port 8084)
-6. gateway-service    (port 8080)  ← poslednji obavezno
-```
-
-### Pokretanje
+Ceo sistem se podiže jednom komandom iz korena projekta:
 
 ```bash
-cd booking-service
-./mvnw spring-boot:run
+./start.sh
 ```
 
-### Testiranje putem Swagger UI
+Skripta automatski:
+1. Briše prethodno pokrenute kontejnere i Docker slike (`docker compose down --remove-orphans`)
+2. Gradi i pokreće sve servise (`docker compose up --build -d`)
+3. Čeka 35 sekundi na stabilizaciju
+4. Čisti RabbitMQ redove od prethodnih sesija
+5. Prikazuje status svih kontejnera i link-ove za pristup
 
-Preporučeno — kroz Gateway (sa autentifikacijom):
-```
-http://localhost:8080/swagger-ui.html
-```
-Odaberi "Rezervacije Service" iz padajućeg menija i dodaj X-API-KEY u "Authorize".
+### Pristupne tačke
 
-Direktan pristup (bez Gateway autentifikacije):
-```
-http://localhost:8083/swagger-ui/index.html
-```
+| Servis | URL | Pristup |
+|--------|-----|---------|
+| API Gateway | `http://localhost:8080` | svi zahtevi kroz ovde |
+| Swagger UI | `http://localhost:8080/swagger-ui.html` | odaberi "Rezervacije Service" |
+| Eureka Dashboard | `http://localhost:8761` | prikaz instanci booking-service |
+| Grafana | `http://localhost:3000` | admin / admin |
+| Zipkin | `http://localhost:9411` | pretraga tragova |
+| RabbitMQ UI | `http://localhost:15672` | guest / guest |
+| Adminer (DB) | `http://localhost:8085` | pregled MySQL tabela |
 
 ### API ključevi za testiranje
 
@@ -277,7 +316,7 @@ http://localhost:8083/swagger-ui/index.html
 | guide_user | guide-key-789 | GUIDE | GET, POST, PUT |
 | guest_user | guest-key-456 | GUEST | GET |
 
-### Monitoring Circuit Breaker-a
+### Monitoring
 
 ```
 http://localhost:8083/actuator/health
@@ -288,58 +327,118 @@ Prikazuje stanje Circuit Breaker-a (`smestajServiceCB`):
 - `OPEN` — servis je pao, zahtjevi se odbijaju odmah
 - `HALF_OPEN` — testiranje da li je servis ponovo dostupan
 
-### Testiranje putem H2 konzole
+---
 
-```
-URL:      http://localhost:8083/h2-console
-JDBC URL: jdbc:h2:mem:orderdb
-Username: sa
-Password: (prazno)
+## Horizontalno skaliranje i Load Balancing
+
+### Tri instance booking-service-a
+
+`docker-compose.yml` konfiguriše automatsko pokretanje 3 replike:
+
+```yaml
+booking-service:
+  deploy:
+    replicas: 3
 ```
 
-**Inicijalni podaci (data.sql):**
-- 5 gostiju
-- 3 politike otkazivanja (100%, 50%, 0% povrata)
-- 6 rezervacija u različitim statusima
-- 7 dodatnih stavki
-- 9 zapisa promjena statusa
+Svaka instanca se automatski registruje u Eureki pod imenom `rezervacije-service` sa jedinstvenim `instance.id` (npr. `rezervacije-service:abc123`). API Gateway koristi `lb://booking-service` URI koji, oslanjajući se na Eureka registar, raspoređuje zahteve po **round-robin** principu.
+
+### Stateless dizajn
+
+Booking servis je projektovan bez serverskog stanja između zahteva:
+- **Nema HTTP sesije** — svaki zahtev je nezavisan, autentifikacija ide kroz `X-API-KEY` header koji Gateway validira
+- **Stanje je u bazi** — MySQL (`eco_tourism_db`) je jedini izvor istine; sve instance dele isti `db-mysql` kontejner
+- **Asinhrono stanje** — promene statusa koje se propagiraju ka drugim servisima idu kroz RabbitMQ, ne kroz memoriju instance
+- **Posledica:** bilo koja od 3 instance može obraditi bilo koji zahtev bez znanja o prethodnim zahtevima
 
 ---
 
-## Konfiguracija (application.properties)
+## Observabilnost (Zadatak 3)
+
+### Loki — centralizovani logovi
+
+Svaka instanca šalje logove u Loki (`http://loki:3100/loki/api/v1/push`) sa metapodacima:
+
+| Label | Vrednost |
+|-------|---------|
+| `app` | `booking-service` |
+| `host` | `${HOSTNAME}` (jedinstveno po instanci) |
+| `level` | `INFO` / `WARN` / `ERROR` |
+
+Logovi se mogu pretraživati u Grafani po instanci koristeći `{app="booking-service", host="..."}`.
+
+### Zipkin — distribuirano praćenje
+
+Svaki zahtev koji prolazi kroz sistem dobija `traceId` na nivou API Gateway-a i prenosi se u W3C `traceparent` formatu (`00-{traceId}-{spanId}-01`). U Zipkin UI-u (`http://localhost:9411`) može se pratiti ceo put zahteva: Gateway → booking-service → accommodation-service.
+
+Konfiguracija:
+```properties
+management.tracing.propagation.type=w3c
+management.tracing.sampling.probability=1.0
+management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+```
+
+### Grafana Dashboard
+
+Dashboard "Zorana Dashboards" (`http://localhost:3000`) se osvežava svakih **10 sekundi** i sadrži:
+
+**Loki vizualizacije (sistemske performanse):**
+- **Log rate po instanci** — Time series grafikon koji prikazuje frekvenciju logova po `host` labelu, omogućavajući uočavanje neujednačene distribucije zahteva između instanci
+- **Poslovni eventi po tipu** — Donut grafikon koji broji pojave ključnih poslovnih akcija (kreiranje polise, otkazivanje rezervacije, pretraga) iz logova u poslednjih 30 minuta
+
+**MySQL vizualizacije (poslovna analitika):**
+- **Raspodela statusa rezervacija** — Pie chart: `SELECT status, COUNT(*) FROM booking GROUP BY status`
+- **Transakcije po načinu plaćanja** — Bar gauge: broj i ukupni iznos transakcija grupisanih po načinu plaćanja
+- **Prihod po mesecima** — Bar chart: `SUM(total_price)` po mesecima za ne-otkazane rezervacije
+
+---
+
+## Dockerfile — višefazna izgradnja
+
+```dockerfile
+# Faza 1: Build (Maven + JDK)
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+# Faza 2: Runtime (samo JRE)
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+Finalna slika sadrži samo JRE i izvršni `.jar` — bez Maven-a, izvornog koda ili privremenih build fajlova.
+
+---
+
+## Konfiguracija (iz Config Servera — `rezervacije-service.properties`)
+
+Servis preuzima konfiguraciju iz eksternog Config Servera pri pokretanju. Ključni parametri:
 
 ```properties
-spring.application.name=rezervacije-service
-spring.config.import=optional:configserver:http://localhost:8888
+# MySQL (Docker)
+spring.datasource.url=jdbc:mysql://db-mysql:3306/eco_tourism_db
+spring.datasource.username=root
+spring.jpa.hibernate.ddl-auto=update
 
-server.port=8083
-
-spring.datasource.url=jdbc:h2:mem:orderdb
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-spring.jpa.hibernate.ddl-auto=none
-spring.sql.init.mode=always
-spring.jpa.defer-datasource-initialization=true
+# RabbitMQ
+spring.rabbitmq.host=rabbitmq
+spring.rabbitmq.port=5672
 
 # Circuit Breaker
-resilience4j.circuitbreaker.instances.smestajServiceCB.register-health-indicator=true
-resilience4j.circuitbreaker.instances.smestajServiceCB.sliding-window-size=10
 resilience4j.circuitbreaker.instances.smestajServiceCB.failure-rate-threshold=50
 resilience4j.circuitbreaker.instances.smestajServiceCB.wait-duration-in-open-state=10s
-resilience4j.circuitbreaker.instances.smestajServiceCB.permitted-number-of-calls-in-half-open-state=3
 
 # Rate Limiter
 resilience4j.ratelimiter.instances.basicLimit.limit-for-period=5
 resilience4j.ratelimiter.instances.basicLimit.limit-refresh-period=10s
-resilience4j.ratelimiter.instances.basicLimit.timeout-duration=100ms
 
-# Config Server dinamička konfiguracija
-custom.welcome-message=Dobrodosli u Order sistem v6!
-
-# Actuator
-management.endpoints.web.exposure.include=health,info,refresh
-management.endpoint.health.show-details=always
+# Tracing
+management.tracing.propagation.type=w3c
+management.tracing.sampling.probability=1.0
+management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
 ```
