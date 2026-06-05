@@ -1,6 +1,7 @@
 package org.example.rezervacijeservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.rezervacijeservice.dto.CancellationPolicyResponse;
 import org.example.rezervacijeservice.exception.ResourceNotFoundException;
 import org.example.rezervacijeservice.model.CancellationPolicy;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CancellationPoliciesService {
 
     private final CancellationPoliciesRepository cancellationPoliciesRepository;
@@ -29,6 +31,7 @@ public class CancellationPoliciesService {
     }
 
     public CancellationPolicyResponse createPolicy(CancellationPolicyResponse dto) {
+        log.info("Kreirana nova polisa - naziv: {}", dto.getPolicyName());
         CancellationPolicy policy = new CancellationPolicy();
         policy.setPolicyName(dto.getPolicyName());
         policy.setRefundPercentage(dto.getRefundPercentage());

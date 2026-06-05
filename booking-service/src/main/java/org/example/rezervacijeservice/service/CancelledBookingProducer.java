@@ -1,6 +1,7 @@
 package org.example.rezervacijeservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.rezervacijeservice.config.RabbitMQConfig;
 import org.example.rezervacijeservice.dto.BookingResponse;
 import org.example.rezervacijeservice.exception.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CancelledBookingProducer {
     private final BookingRepository bookingRepository;
     private final RabbitTemplate rabbitTemplate;
@@ -32,6 +34,7 @@ public class CancelledBookingProducer {
 
         Booking saved = bookingRepository.save(booking);
 
+        log.info("Otkazana rezervacija - bookingId: {}", id);
         System.out.println("Slanje BookingCancelledEventDTO za bookingId: " + event.getBookingId());
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.AVAILABILITY_EXCHANGE,

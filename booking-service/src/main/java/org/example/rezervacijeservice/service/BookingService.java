@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.example.rezervacijeservice.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.rezervacijeservice.client.UnitClient;
 import org.example.rezervacijeservice.dto.*;
 import org.example.rezervacijeservice.mapper.BookingRequestMapper;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -49,6 +51,7 @@ public class BookingService {
     }
 
     public BookingResponse getBookingById(Long id) {
+        log.info("Pretraga rezervacije - bookingId: {}", id);
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
         return responseMapper.toBookingResponse(booking);
