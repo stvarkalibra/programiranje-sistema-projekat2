@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="avantura-service"/>
-    <springProperty scope="context" name="instanceId" source="instance.id" defaultValue="avantura-local"/>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="avantura-service"/>
+    <springProperty scope="context" name="INSTANCE_ID" source="instance.id" defaultValue="${HOSTNAME:-avantura-local}"/>
+    <springProperty scope="context" name="LOKI_URL" source="loki.url" defaultValue="http://loki:3100"/>
 
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%-36X{traceId:-no-trace}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
         <http>
-            <url>http://loki:3100/loki/api/v1/push</url>
+            <url>${LOKI_URL}/loki/api/v1/push</url>
         </http>
-
         <format>
-            <encoder class="com.github.loki4j.logback.Loki4jEncoder">
-                <label>
-                    <pattern>app=${appName},instance=${instanceId},level=%level,traceId=%X{traceId}</pattern>
-                </label>
-                <message class="com.github.loki4j.logback.JsonLayout"/>
-            </encoder>
+            <label>
+                <pattern>app=${APP_NAME},level=%level,instance=${INSTANCE_ID}</pattern>
+            </label>
+            <message>
+                <pattern>%d{HH:mm:ss} [%-36X{traceId:-no-trace}] %-5level %logger{36} - %msg%n</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
         </format>
     </appender>
 
@@ -26,5 +30,9 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="LOKI"/>
     </root>
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.raflab.avanturaservice" level="INFO"/>
 
 </configuration>

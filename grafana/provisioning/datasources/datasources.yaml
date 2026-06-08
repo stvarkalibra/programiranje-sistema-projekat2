@@ -32,3 +32,15 @@ datasources:
       password: root
     jsonData:
       sslmode: "disable"
+
+  # MySQL za Adventure i Guide servise (Mihajlo)
+  - name: MySQL-AdventureGuide
+    type: mysql
+    access: proxy
+    url: db-mysql:3306
+    user: root
+    database: eco_tourism_db
+    secureJsonData:
+      password: root
+    jsonData:
+      sslmode: "disable"
