@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    accommodation-service/src/main/resources/logback-spring.xml
+    Uniformni konzolni log + slanje u Loki.
+    Format: HH:mm:ss [traceId] LEVEL logger - poruka
+-->
+<configuration>
+    <springProperty scope="context" name="APP_NAME"   source="spring.application.name" defaultValue="accommodation-service"/>
+    <springProperty scope="context" name="LOKI_URL"   source="loki.url"                defaultValue="http://loki:3100"/>
+
+    <!-- ============================================================ -->
+    <!-- KONZOLA: uniformni format sa traceId/spanId (W3C propagacija) -->
+    <!-- ============================================================ -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%-36X{traceId:-no-trace}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ============================================================ -->
+    <!-- LOKI: slanje logova u Grafana Loki                           -->
+    <!-- ============================================================ -->
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>${LOKI_URL}/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <!--
+                    Label-i su metapodaci po kojima Grafana filtrira logove.
+                    app=accommodation-service, level=INFO/ERROR, instance=hostname
+                -->
+                <pattern>app=${APP_NAME},level=%level,instance=${HOSTNAME:-unknown}</pattern>            </label>
+            <message>
+                <!-- Isti format kao konzola — konzistentnost -->
+                <pattern>%d{HH:mm:ss} [%-36X{traceId:-no-trace}] %-5level %logger{36} - %msg%n</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
+        </format>
+    </appender>
+
+    <!-- ============================================================ -->
+    <!-- ROOT: oba appender-a aktivna                                 -->
+    <!-- ============================================================ -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOKI"/>
+    </root>
+
+    <!-- Smanji buku od Spring/Hibernate u dev modu -->
+    <logger name="org.hibernate.SQL"              level="WARN"/>
+    <logger name="org.springframework.amqp"       level="WARN"/>
+    <logger name="com.ecotravel.accommodation"    level="INFO"/>
+</configuration>

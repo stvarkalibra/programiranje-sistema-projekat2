@@ -306,7 +306,6 @@ services:
     build:
       context: .
       dockerfile: accommodation-service/Dockerfile
-    container_name: accommodation-cont
     environment:
       - CONFIG_SERVER_URL=http://config-service:8888
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql:3306/eco_tourism_db?createDatabaseIfNotExist=true
@@ -320,7 +319,14 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - ZIPKIN_URL=http://zipkin:9411
+      - LOKI_URL=http://loki:3100
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    deploy:
+      replicas: 3
     depends_on:
+      discovery-service:
+        condition: service_started
       db-mysql:
         condition: service_healthy
       config-service:
@@ -329,7 +335,6 @@ services:
         condition: service_healthy
     networks:
       - backend-network
-
 
   maintenance-service:
     build:
@@ -350,7 +355,12 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - ZIPKIN_URL=http://zipkin:9411
+      - LOKI_URL=http://loki:3100
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
     depends_on:
+      discovery-service:
+        condition: service_started
       db-mysql:
         condition: service_healthy
       config-service:

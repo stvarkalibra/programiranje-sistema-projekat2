@@ -1,0 +1,502 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "anja-maintenance-dashboard",
+    "generation": 1,
+    "creationTimestamp": "2026-06-08T00:00:00Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "title": "Anja – Maintenance Dashboard",
+    "description": "Biznis analitika i observabilnost maintenance-service mikroservisa",
+    "editable": true,
+    "liveNow": false,
+    "preload": false,
+    "tags": ["maintenance", "anja"],
+    "cursorSync": "Off",
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-30m",
+      "to": "now",
+      "autoRefresh": "10s",
+      "autoRefreshIntervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "variables": [],
+    "links": [],
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": { "grafana.app/export-label": "grafana-1" }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "elements": {
+
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Radni nalozi po statusu",
+          "description": "Raspodela radnih naloga: PENDING, IN_PROGRESS, COMPLETED, CANCELLED",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "mysql",
+                      "version": "v0",
+                      "spec": {
+                        "dataset": "eco_tourism_db",
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT status AS 'Status', COUNT(*) AS 'Broj naloga' FROM work_orders GROUP BY status ORDER BY FIELD(status, 'PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')"
+                      },
+                      "labels": { "grafana.app/export-label": "mysql-accommodation-1" }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "displayLabels": ["name", "percent"],
+                "pieType": "donut",
+                "legend": { "displayMode": "list", "placement": "right", "showLegend": true },
+                "tooltip": { "mode": "single", "sort": "none", "hideZeros": false },
+                "sort": "desc",
+                "reduceOptions": { "calcs": [], "fields": "", "values": true }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": { "mode": "palette-classic" },
+                  "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } }
+                },
+                "overrides": [
+                  {
+                    "matcher": { "id": "byName", "options": "PENDING" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "yellow" } }]
+                  },
+                  {
+                    "matcher": { "id": "byName", "options": "IN_PROGRESS" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }]
+                  },
+                  {
+                    "matcher": { "id": "byName", "options": "COMPLETED" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+                  },
+                  {
+                    "matcher": { "id": "byName", "options": "CANCELLED" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Opterećenje radnika – aktivni nalozi po specijalnosti",
+          "description": "Broj PENDING + IN_PROGRESS naloga grupisanih po specijalnosti radnika",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "mysql",
+                      "version": "v0",
+                      "spec": {
+                        "dataset": "eco_tourism_db",
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT w.specialty AS 'Specijalnost', COUNT(wo.id) AS 'Aktivni nalozi', SUM(mt.estimated_duration_hours) AS 'Ukupno sati' FROM work_orders wo JOIN workers w ON wo.worker_id = w.id JOIN maintenance_tasks mt ON wo.task_id = mt.id WHERE wo.status IN ('PENDING', 'IN_PROGRESS') GROUP BY w.specialty ORDER BY COUNT(wo.id) DESC"
+                      },
+                      "labels": { "grafana.app/export-label": "mysql-accommodation-1" }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "namePlacement": "auto",
+                "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false, "calcs": [] },
+                "tooltip": { "mode": "single", "sort": "none", "hideZeros": false },
+                "reduceOptions": { "calcs": [], "fields": "/^Aktivni nalozi$/", "values": true },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": { "mode": "continuous-GrYlRd" },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      { "value": 0, "color": "green" },
+                      { "value": 3, "color": "yellow" },
+                      { "value": 5, "color": "red" }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Najzahtjevniji tipovi zadataka (po prosječnom trajanju)",
+          "description": "Prosječno trajanje po tipu zadatka — pomaže planiranju rasporeda radnika",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "mysql",
+                      "version": "v0",
+                      "spec": {
+                        "dataset": "eco_tourism_db",
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT mt.task_name AS 'Tip zadatka', mt.estimated_duration_hours AS 'Trajanje (h)', COUNT(wo.id) AS 'Broj naloga' FROM maintenance_tasks mt LEFT JOIN work_orders wo ON mt.id = wo.task_id GROUP BY mt.id, mt.task_name, mt.estimated_duration_hours ORDER BY mt.estimated_duration_hours DESC"
+                      },
+                      "labels": { "grafana.app/export-label": "mysql-accommodation-1" }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "orientation": "auto",
+                "barWidth": 0.7,
+                "barRadius": 0.05,
+                "groupWidth": 0.7,
+                "fullHighlight": false,
+                "showValue": "always",
+                "stacking": "none",
+                "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true, "calcs": [] },
+                "tooltip": { "mode": "single", "sort": "none", "hideZeros": false },
+                "xTickLabelRotation": -15,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": { "mode": "palette-classic" },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "sati",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "lineWidth": 1,
+                    "scaleDistribution": { "type": "linear" },
+                    "thresholdsStyle": { "mode": "off" }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [{ "value": 0, "color": "green" }]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Log rate – maintenance-service (INFO / ERROR)",
+          "description": "Broj log poruka po minutu. Skok ERROR linije ukazuje na problem (npr. Feign greška prema accommodation-service).",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "loki",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "code",
+                        "direction": "backward",
+                        "queryType": "range",
+                        "expr": "sum(count_over_time({app=\"maintenance-service\", level=\"INFO\"}[1m]))",
+                        "legendFormat": "INFO"
+                      },
+                      "labels": { "grafana.app/export-label": "loki-1" }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "loki",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "code",
+                        "direction": "backward",
+                        "queryType": "range",
+                        "expr": "sum(count_over_time({app=\"maintenance-service\", level=\"ERROR\"}[1m]))",
+                        "legendFormat": "ERROR"
+                      },
+                      "labels": { "grafana.app/export-label": "loki-1" }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true, "calcs": [] },
+                "tooltip": { "mode": "multi", "sort": "none", "hideZeros": false }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": { "mode": "palette-classic" },
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 2,
+                    "fillOpacity": 10,
+                    "pointSize": 5,
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "logs/min",
+                    "scaleDistribution": { "type": "linear" },
+                    "thresholdsStyle": { "mode": "off" },
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": { "id": "byName", "options": "ERROR" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+                  },
+                  {
+                    "matcher": { "id": "byName", "options": "INFO" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Circuit Breaker i FALLBACK aktivnosti",
+          "description": "Detekcija pada accommodation-service: svaki FALLBACK log znači da circuit breaker intervenira",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "loki",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "code",
+                        "direction": "backward",
+                        "queryType": "range",
+                        "expr": "sum(count_over_time({app=\"maintenance-service\"} |= \"FALLBACK\"[1m]))",
+                        "legendFormat": "Fallback pozivi"
+                      },
+                      "labels": { "grafana.app/export-label": "loki-1" }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "loki",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "code",
+                        "direction": "backward",
+                        "queryType": "range",
+                        "expr": "sum(count_over_time({app=\"maintenance-service\"} |= \"[CONSUMER]\"[1m]))",
+                        "legendFormat": "RabbitMQ eventi primljeni"
+                      },
+                      "labels": { "grafana.app/export-label": "loki-1" }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true, "calcs": [] },
+                "tooltip": { "mode": "multi", "sort": "none", "hideZeros": false }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": { "mode": "palette-classic" },
+                  "custom": {
+                    "drawStyle": "bars",
+                    "lineWidth": 1,
+                    "fillOpacity": 60,
+                    "pointSize": 5,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "događaji/min",
+                    "scaleDistribution": { "type": "linear" },
+                    "thresholdsStyle": { "mode": "off" },
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": { "id": "byName", "options": "Fallback pozivi" },
+                    "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "orange" } }]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+
+    },
+
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          { "kind": "GridLayoutItem", "spec": { "x": 0,  "y": 0,  "width": 8,  "height": 8, "element": { "kind": "ElementReference", "name": "panel-1" } } },
+          { "kind": "GridLayoutItem", "spec": { "x": 8,  "y": 0,  "width": 16, "height": 8, "element": { "kind": "ElementReference", "name": "panel-2" } } },
+          { "kind": "GridLayoutItem", "spec": { "x": 0,  "y": 8,  "width": 24, "height": 8, "element": { "kind": "ElementReference", "name": "panel-3" } } },
+          { "kind": "GridLayoutItem", "spec": { "x": 0,  "y": 16, "width": 12, "height": 8, "element": { "kind": "ElementReference", "name": "panel-4" } } },
+          { "kind": "GridLayoutItem", "spec": { "x": 12, "y": 16, "width": 12, "height": 8, "element": { "kind": "ElementReference", "name": "panel-5" } } }
+        ]
+      }
+    },
+
+    "preferences": {
+      "layout": { "kind": "GridLayout", "spec": { "items": [] } }
+    }
+  }
+}
